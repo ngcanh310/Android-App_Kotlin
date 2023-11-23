@@ -234,7 +234,7 @@ fun goalOK(){
 }
 
 @Composable
-fun goalKO(){
+fun goalKO (){
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentWidth(),) {
