@@ -2,6 +2,7 @@ package com.example.mylife.ui.food
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,8 +14,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -83,13 +91,86 @@ fun listItem(
         }
 }
 
+@Composable
+fun TopBarAgg(navigateToHome: (Int) -> Unit = {},
+           navigateToUserInfor: () -> Unit = {},
+           navigateToMain: () -> Unit = {},
+           hasHome: Boolean = true,
+           hasUser: Boolean = true,
+           home : Boolean = true,
+           user :Boolean = true,
+           justify : Arrangement.Horizontal =  if ((hasHome && hasUser) || (!home && hasUser) || (hasHome && !user)) Arrangement.SpaceBetween else Arrangement.Center ,
+
+           )
+{
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color(0xFF473C8B))
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = justify
+        ) {
+            if(hasHome==true) {
+                IconButton(onClick = {navigateToHome}) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
+            if(home == false){
+                IconButton(onClick = {}) {
+                    Icon(
+                        imageVector = Icons.Filled.List,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
+            Button(onClick = navigateToMain,
+                modifier = Modifier.background(color = Color(0xFF473C8B))) {
+                Text(
+                    text = "MyLife",
+                    fontSize = 30.sp,
+                    modifier = Modifier.align(Alignment.CenterVertically),
+
+                    color = Color.White
+                )
+            }
+
+            if(hasUser){
+                IconButton(onClick = navigateToUserInfor) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
+            if(user == false){
+                IconButton(onClick = {}) {
+                    Icon(
+                        imageVector = Icons.Filled.Call,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FullInforFood(
     navigateToUser: () -> Unit,
     navigateToHome: () -> Unit,
-
+    navigateToMain: () -> Unit ,
     modifier: Modifier = Modifier,
     viewModel: DetailInforViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -99,6 +180,7 @@ fun FullInforFood(
             TopBar(hasUser = true,
                 navigateToUserInfor = navigateToUser,
                 navigateToHome = navigateToHome,
+                navigateToMain = navigateToMain,
                 hasHome = true)
         },
     ) { innerPadding ->

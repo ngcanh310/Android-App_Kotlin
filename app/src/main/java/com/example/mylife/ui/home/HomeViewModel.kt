@@ -8,6 +8,7 @@ import com.example.mylife.data.Activity.UserActivityRepository
 import com.example.mylife.data.Meal.Meal
 import com.example.mylife.data.Meal.MealRepository
 import com.example.mylife.data.User.UserRepository
+import com.example.mylife.ui.information.formatDouble
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -58,7 +59,7 @@ class HomeViewModel(
             fat += meal.meal_fat
         }
 
-        return Nutrition(calories, protein, carb, fat)
+        return Nutrition(formatDouble(calories), formatDouble(protein), formatDouble(carb), formatDouble(fat))
     }
 
     private fun caculateActivityCalories(activityList: List<UserActivity>): Double {

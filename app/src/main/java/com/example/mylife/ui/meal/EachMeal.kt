@@ -138,6 +138,7 @@ fun rowItemEachMeal(
     navigateToAddFood: (Int) -> Unit,
     navigateToUser: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToMain: () -> Unit ,
     navigateToDetailFood: (Int) -> Unit,
     viewModel: EachMealViewModel = viewModel(factory = AppViewModelProvider.Factory)
 )
@@ -147,9 +148,9 @@ fun rowItemEachMeal(
     Scaffold(
         topBar = {
             TopBar(
-
-                navigateToHome,
-                navigateToUser,
+                navigateToMain = navigateToMain,
+                navigateToHome = navigateToHome,
+                navigateToUserInfor = navigateToUser,
                 hasHome = true,
                 hasUser = true
             )

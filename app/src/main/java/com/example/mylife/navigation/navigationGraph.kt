@@ -80,6 +80,7 @@ fun AppNavHost(
                 navigateToAddExer = { navController.navigate(AddExerDestination.route) },
                 navigateToUser = { navController.navigate(USerDestination.route) },
                 navigateToHome = { navController.navigate(HomeDestination.route) },
+                navigateToMain = { navController.navigate(HomeDestination.route) }
             )
         }//
         composable(
@@ -90,8 +91,8 @@ fun AppNavHost(
         ) {
             FullInforFood(
                 navigateToUser = { navController.navigate(USerDestination.route) },
-                navigateToHome = { navController.navigate(EachMealDestination.route) },
-
+                navigateToHome = { navController.navigate("${EachMealDestination.route}/$it") },
+                navigateToMain = { navController.navigate(HomeDestination.route) }
             )
         }//
         composable(
@@ -105,12 +106,14 @@ fun AppNavHost(
                 navigateToEachMeal = { navController.navigate("${EachMealDestination.route}/$it") },
                 navigateToUser = { navController.navigate(USerDestination.route) },
                 navigateToHome = { navController.navigate("${EachMealDestination.route}/$it") },
+                navigateToMain = { navController.navigate(HomeDestination.route) }
             )
         }
         composable(route = AddExerDestination.route) {
             AddExerciseScreen(navigateToHome = { navController.navigate(ActivityDestination.route) },
                 navigateToUser = { navController.navigate(USerDestination.route) },
-                navigateToActivity =  { navController.navigate(ActivityDestination.route) }
+                navigateToActivity =  { navController.navigate(ActivityDestination.route) },
+                navigateToMain = { navController.navigate(HomeDestination.route) }
             )
         }//
         composable(route = USerDestination.route) {
@@ -122,7 +125,8 @@ fun AppNavHost(
             rowItemListMeal(navigateToEachMeal = { navController.navigate("${EachMealDestination.route}/$it") },
                 navigateToAddMeal = { navController.navigate(AddMealDestination.route) },
                 navigateToUser = { navController.navigate(USerDestination.route) },
-                navigateToHome = { navController.navigate(HomeDestination.route) }
+                navigateToHome = { navController.navigate(HomeDestination.route) },
+                navigateToMain = { navController.navigate(HomeDestination.route) }
             )
         }//
         composable(
@@ -136,6 +140,7 @@ fun AppNavHost(
                 navigateToUser = { navController.navigate(USerDestination.route) },
                 navigateToAddFood = { navController.navigate("${AddFoodDestination.route}/$it") },
                 navigateToDetailFood = { navController.navigate("${DetailInforDestination.route}/$it") },
+                navigateToMain = { navController.navigate(HomeDestination.route) }
             )
         }//
         composable(
@@ -144,11 +149,14 @@ fun AppNavHost(
             AddMealScreen(navigateToHome = { navController.navigate(MealListDestination.route) },
                 navigateToUser = { navController.navigate(USerDestination.route) },
                 navigateToListMeal = { navController.navigate(MealListDestination.route) },
-                navigateToEachMeal = {navController.navigate("${EachMealDestination.route}/$it")}
+                navigateToEachMeal = {navController.navigate("${EachMealDestination.route}/$it")},
+                navigateToMain = { navController.navigate(HomeDestination.route) }
             )
         }//
     }
 }
+
+// navigateToMain = { navController.navigate(HomeDestination.route) }
 
 enum class AppScreen(@StringRes val title: Int) {
     Home(title = R.string.app_name),

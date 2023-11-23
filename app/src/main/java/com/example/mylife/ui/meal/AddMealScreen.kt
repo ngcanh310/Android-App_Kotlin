@@ -43,12 +43,14 @@ fun AddMealScreen(navigateToListMeal: () -> Unit,
                   navigateToUser: () -> Unit,
                   navigateToHome: () -> Unit,
                   navigateToEachMeal: (Int) -> Unit,
+                  navigateToMain: () -> Unit ,
                   viewModel: MealEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
                   ){
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             TopBar(
+                navigateToMain = navigateToMain,
                 navigateToUserInfor=navigateToUser,
                 navigateToHome=navigateToHome,
                 hasHome = true,
@@ -84,7 +86,7 @@ fun AddMealBody(
     Spacer(modifier = Modifier.height(30.dp))
     Column {
         Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(65.dp))
             Text(
                 text = "ADD MORE MEAL:",
                 fontSize = 25.sp,

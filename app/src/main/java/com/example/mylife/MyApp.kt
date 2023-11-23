@@ -41,6 +41,7 @@ import androidx.compose.foundation.background
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.Button
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 
@@ -53,16 +54,19 @@ fun MyApp(navController: NavHostController = rememberNavController()) {
 @Composable
 fun TopBar(navigateToHome: () -> Unit = {},
            navigateToUserInfor: () -> Unit = {},
+           navigateToMain: () -> Unit = {},
            hasHome: Boolean = true,
            hasUser: Boolean = true,
            home : Boolean = true,
            user :Boolean = true,
-           justify : Arrangement.Horizontal =  if ((hasHome && hasUser) || (!home && !user)) Arrangement.SpaceBetween else Arrangement.Center ,
+           justify : Arrangement.Horizontal =  if ((hasHome && hasUser) || (!home && hasUser) || (hasHome && !user)) Arrangement.SpaceBetween else Arrangement.Center ,
 
 )
 {
     Box(
-        modifier = Modifier.fillMaxWidth().background(color = Color(0xFF473C8B))
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color(0xFF473C8B))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -86,13 +90,17 @@ fun TopBar(navigateToHome: () -> Unit = {},
                     )
                 }
             }
-            Text(
-                text = "MyLife",
-                fontSize = 30.sp,
-                modifier = Modifier.align(Alignment.CenterVertically),
+            Button(onClick = navigateToMain,
+                modifier = Modifier.background(color = Color(0xFF473C8B))) {
+                Text(
+                    text = "MyLife",
+                    fontSize = 30.sp,
+                    modifier = Modifier.align(Alignment.CenterVertically),
 
-                color = Color.White
-            )
+                    color = Color.White
+                )
+            }
+
             if(hasUser){
                 IconButton(onClick = navigateToUserInfor) {
                     Icon(

@@ -133,6 +133,7 @@ fun rowItemListMeal(navigateToEachMeal: (Int) -> Unit,
                     navigateToAddMeal: () -> Unit,
                     navigateToUser: () -> Unit,
                     navigateToHome: () -> Unit,
+                    navigateToMain: () -> Unit ,
                     viewModel: AddMealViewModel = viewModel(factory = AppViewModelProvider.Factory)
                     )
     {
@@ -141,7 +142,7 @@ fun rowItemListMeal(navigateToEachMeal: (Int) -> Unit,
         Scaffold(
             topBar = {
                 TopBar(
-
+                    navigateToMain = navigateToMain,
                     navigateToHome=navigateToHome,
                     navigateToUserInfor = navigateToUser,
                     hasHome = true,

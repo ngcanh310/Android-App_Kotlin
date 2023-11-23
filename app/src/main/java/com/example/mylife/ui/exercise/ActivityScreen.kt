@@ -96,13 +96,14 @@ fun MyLazyColumActivity(
 fun ActivityScreen(navigateToAddExer: () -> Unit,
                    navigateToUser: () -> Unit,
                    navigateToHome: () -> Unit,
+                   navigateToMain: () -> Unit ,
                    viewModel: ActivityViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val activityUiState by viewModel.ActivityUiState.collectAsState()
     Scaffold(
         topBar = {
             TopBar(
-
+                navigateToMain = navigateToMain,
                 navigateToHome=navigateToHome,
                 navigateToUserInfor = navigateToUser,
                 hasHome = true,

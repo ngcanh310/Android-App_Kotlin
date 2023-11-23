@@ -282,13 +282,7 @@ fun UserInformationScreenBody(
                             text = "BMI = ${userInfo.userBmi}, DEE = ${userInfo.userTdee}",
                             fontSize = 20.sp
                         )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        IconButton(onClick = {}) {
-                            Icon(
-                                imageVector = Icons.Filled.Create,
-                                contentDescription = null
-                            )
-                        }
+
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))

@@ -58,6 +58,7 @@ object AddExerDestination : navigationDestination {
 fun AddExerciseScreen(navigateToActivity: () -> Unit,
                       navigateToUser: () -> Unit,
                       navigateToHome: () -> Unit,
+                      navigateToMain: () -> Unit ,
                       viewModel: AddExerciseViewModel = viewModel(factory = AppViewModelProvider.Factory)
                       ) {
     val searchText by viewModel.searchText.collectAsState()
@@ -67,6 +68,7 @@ fun AddExerciseScreen(navigateToActivity: () -> Unit,
     Scaffold(
         topBar = {
             TopBar(
+                navigateToMain = navigateToMain,
                 hasUser = true,
                 navigateToUserInfor = navigateToUser,
                 navigateToHome = navigateToHome,

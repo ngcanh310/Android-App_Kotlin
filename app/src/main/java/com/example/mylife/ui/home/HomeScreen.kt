@@ -200,6 +200,72 @@ fun HomeScreen(
     }
 }
 
+@Composable
+fun goalOK(){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentWidth(),) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth()
+                .padding(20.dp)
+                .border(1.dp, Color.Black),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth()
+                .padding(20.dp)
+                ,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Text(text = "toi ooans asd sad as d asd asd:")
+                Spacer(modifier = Modifier.height(20.dp))
+                Image(
+                    painter = painterResource(R.drawable.success),
+                    contentDescription = null,
+                    modifier = Modifier.size(120.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun goalKO(){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentWidth(),) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth()
+                .padding(20.dp)
+                .border(1.dp, Color.Black),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth()
+                .padding(20.dp)
+                ,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Text(text = "toi ooans asd sad as d asd asd:")
+                Spacer(modifier = Modifier.height(20.dp))
+                Image(
+                    painter = painterResource(R.drawable.fail),
+                    contentDescription = null,
+                    modifier = Modifier.size(120.dp)
+                )
+            }
+        }
+    }
+}
+
 // trang chính của app
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -211,7 +277,7 @@ fun HomeScreenBody(
                userDetail: UserDetail
         ) {
     Column {
-        var ok=2;
+        var ok=1;
         Spacer(modifier = Modifier.height(45.dp))
         Column {
             Spacer(modifier = Modifier.height(30.dp))
@@ -228,20 +294,12 @@ fun HomeScreenBody(
             Spacer(modifier = Modifier.height(20.dp))
             Activity(navigateToListExer)
             Meal(navigateToListMeal)
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             if(ok==1){
-                Column(modifier = Modifier.fillMaxWidth().wrapContentWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center) {
-                    Image(painter = painterResource(R.drawable.success), contentDescription = null, modifier = Modifier.size(160.dp))
-                }
+                goalOK()
             }
             if(ok==2){
-                Column(modifier = Modifier.fillMaxWidth().wrapContentWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center) {
-                    Image(painter = painterResource(R.drawable.fail), contentDescription = null, modifier = Modifier.size(160.dp))
-                }
+                goalKO()
             }
         }
     }

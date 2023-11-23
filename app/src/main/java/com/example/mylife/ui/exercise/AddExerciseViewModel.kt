@@ -62,7 +62,7 @@ class AddExerciseViewModel(
         )
         if (validateInput()) {
             addExerciseUiState = addExerciseUiState.copy(
-                calories = uiState.time.toInt() * uiState.activity.calories_consume
+                calories = (uiState.time.toInt() * uiState.activity.calories_consume)/30
             )
         }
     }

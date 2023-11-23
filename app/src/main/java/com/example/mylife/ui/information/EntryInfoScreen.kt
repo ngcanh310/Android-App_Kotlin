@@ -101,7 +101,7 @@ fun UpProfileBody(
         .verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(30.dp))
         Column {
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(35.dp))
             Text(
                 text = "Please enter your information",
                 fontSize = 25.sp,

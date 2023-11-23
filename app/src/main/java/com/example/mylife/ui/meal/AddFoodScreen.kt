@@ -62,6 +62,7 @@ fun AddFoodScreen(
     navigateToEachMeal: (Int) -> Unit,
     navigateToUser: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToMain: () -> Unit ,
     viewModel: AddFoodViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val searchText by viewModel.searchText.collectAsState()
@@ -70,6 +71,7 @@ fun AddFoodScreen(
     Scaffold(
         topBar = {
             TopBar(
+                navigateToMain = navigateToMain,
                 navigateToUserInfor =navigateToUser,
                 navigateToHome = navigateToHome,
                 hasHome = true,
