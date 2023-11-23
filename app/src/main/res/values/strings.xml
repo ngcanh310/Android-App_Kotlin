@@ -1,0 +1,58 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">My Life</string>
+    <string name="login">Your acount</string>
+    <string name="pass">Your password</string>
+    <string name="loginTittle">LOG IN</string>
+    <string name="registerTittle">REGISTER</string>
+    <string name="remmember">Remember me</string>
+    <string name="accept">I accept all policy</string>
+    <string name="exercise">Activity</string>
+
+    <string name="Meal">Meal</string>
+
+    <string name = "name">Your Full Name</string>
+    <string name = "age">Your Age</string>
+    <string name = "gender">Gender</string>
+    <string name = "height">Height(Cm)</string>
+    <string name = "food">Food</string>
+    <string name = "weight">Weight(Kg)</string>
+    <string name = "goal">Your Goal</string>
+    <string name="in">Kcal in</string>
+    <string name="out">Kcal out</string>
+    <string name="total">Total</string>
+    <string name="exer">Activity</string>
+    <string name="kcal">Kcal</string>
+    <string name="time">Time(minute)</string>
+    <string name="search">Search</string>
+
+
+    <string name="quantity">Quantity(gam)</string>
+
+    <string name="c1">Protein</string>
+    <string name="c2">Carbohydrate</string>
+    <string name="c3">Fat</string>
+    <string name="c4">Vitamin</string>
+    <string name="c5">Hydrat</string>
+
+    <string name="back_button">BACK</string>
+    <string name="user">User</string>
+    <string name="item_entry_title_food">AddFood</string>
+    <string name="item_entry_title_exer">AddExer</string>
+    <string name="items_title_food">ViewFood</string>
+    <string name="items_title_exer">ViewExer</string>
+    <string name="item_detail_title">detailFood</string>
+    <string name="Name">Name</string>
+    <string name="list_food">list-food</string>
+    <string name="list_exer">list-exer</string>
+    <string name="HOME">Home</string>
+    <string name="USERINFOR">User infor</string>
+    <string name="FOODLIST">Food List</string>
+    <string name="DETAILINFOR">Detail infor</string>
+    <string name="ADDFOOD">Add Food</string>
+    <string name="EXERLIST">Activity list</string>
+    <string name="ADDEXER">Add Exercise</string>
+    <string name="WELCOME">Welcome</string>
+    <string name="ENTRY">Entry Infor</string>
+    <string name="MEALLIST">Meal List</string>
+
+</resources>
