@@ -56,6 +56,7 @@ object AppViewModelProvider {
         initializer {
             FoodListViewModel(
                 myLife().container.foodRepository,
+                myLife().container.servingRepository,
                 this.createSavedStateHandle()
             )
         }
@@ -98,7 +99,6 @@ object AppViewModelProvider {
             AddExerciseViewModel(
                 myLife().container.userActivityRepository,
                 myLife().container.activityRepository,
-                this.createSavedStateHandle()
             )
         }
         initializer {

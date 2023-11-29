@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.mylife.data.Meal.CurrentDateHolder
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,6 +21,7 @@ interface UserActivityDao {
     @Query("SELECT * from user_activity WHERE user_activity_id = :id")
     fun getActivity(id: Int): Flow<UserActivity>
 
-    @Query("SELECT * FROM user_activity WHERE SUBSTR(creationDate, 1, 10) = SUBSTR(:currentDate, 1, 10)")
-    fun getActivityForToday(currentDate: String = CurrentDateHolder.currentDate): Flow<List<UserActivity>>
+    @Query("SELECT * FROM user_activity WHERE SUBSTR(creationDate, 1, 10) = SUBSTR(:date, 1, 10)")
+    fun getActivityForDate(date: String): Flow<List<UserActivity>>
+
 }

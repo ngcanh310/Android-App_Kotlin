@@ -1,29 +1,39 @@
 package com.example.mylife.ui.meal
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.mylife.data.Meal.Meal
 import com.example.mylife.data.Meal.MealRepository
+import kotlinx.coroutines.flow.firstOrNull
 
 class MealEntryViewModel(
     private val mealRepository: MealRepository,
 ): ViewModel() {
     var mealEntryUiState by mutableStateOf(MealEntryUiState())
-    fun updateUiState(uiState: MealEntryUiState){
+
+    suspend fun getLatestMeal(): Meal? {
+        val latestMealFlow = mealRepository.getLatestMeal()
+        latestMealFlow.collect {
+            Log.d("LatestMeal", "Latest Meal ID: ${it.meal_id}")
+        }
+        return latestMealFlow.firstOrNull()
+    }
+
+    fun updateUiState(uiState: MealEntryUiState) {
         mealEntryUiState = MealEntryUiState(mealName = uiState.mealName)
     }
 
-    suspend fun addMeal(){
+    suspend fun addMeal() {
         mealRepository.insert_meal(mealEntryUiState.toMeal())
-        mealEntryUiState.numberOfMeal += 1
     }
+
 }
 
 data class MealEntryUiState(
     val mealName: String = "",
-    var numberOfMeal: Int = 1,
 )
 
 fun MealEntryUiState.toMeal(): Meal = Meal(

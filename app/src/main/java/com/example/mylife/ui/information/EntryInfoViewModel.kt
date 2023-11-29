@@ -6,14 +6,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.mylife.data.AppInfo.AppInfo
 import com.example.mylife.data.AppInfo.AppInfoRepository
 import com.example.mylife.data.User.User
 import com.example.mylife.data.User.UserRepository
-import com.example.mylife.navigation.tonavUiState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlin.math.round
 
 class EntryInfoViewModel(
@@ -22,29 +20,29 @@ class EntryInfoViewModel(
 ) : ViewModel() {
     var entryInfoUiState by mutableStateOf(EntryInfoUiState())
         private set
-    var navUiState by mutableStateOf(com.example.mylife.navigation.navUiState())
-        private set
-    init {
-        viewModelScope.launch {
-            navUiState = appInfoRepository.getInfo()
-                .first()
-                .tonavUiState()
-            Log.d("Info","${appInfoRepository.getInfo()}")
-        }
+    var appInfo = MutableStateFlow(appInfoRepository.getInfo())
+
+    suspend fun updateAppInfo() {
+        appInfo.value = appInfo.value.copy(first_time = 1)
+        appInfoRepository.updateInfo(AppInfo(1, 1))
     }
-    suspend fun updateAppInfo(){
-        appInfoRepository.updateInfo(AppInfo(1,1))
+
+    fun updateUiState(userInfo: UserInfo) {
+        entryInfoUiState =
+            EntryInfoUiState(userInfo = userInfo, isEntryValid = validateInput(userInfo))
     }
-    fun updateUiState(userInfo: UserInfo){
-        entryInfoUiState = EntryInfoUiState(userInfo = userInfo, isEntryValid = validateInput(userInfo))
-    }
-    suspend fun saveUser(){
-        if(validateInput()){
-            caculateBMI()
+
+    suspend fun saveUser() {
+        if (validateInput()) {
             caculateTDEE()
             caculateNutrition()
-            userRepository.add_user(entryInfoUiState.userInfo.toUser())
-            Log.d("saveUser", "save succesfully")
+            caculateBMI()
+            if (userRepository.getUser(1).first() == null) {
+                userRepository.add_user(entryInfoUiState.userInfo.toUser())
+            } else {
+                userRepository.update_ser(entryInfoUiState.userInfo.toUser())
+            }
+            updateAppInfo()
         }
     }
     private fun validateInput(uiState: UserInfo = entryInfoUiState.userInfo): Boolean{
@@ -53,12 +51,14 @@ class EntryInfoViewModel(
                     && userWeight.isNotBlank() && userAim.isNotBlank() && userActivityRate.isNotBlank()
         }
     }
-    private fun caculateBMI(uiState: UserInfo = entryInfoUiState.userInfo){
+    private fun caculateBMI(uiState: UserInfo = entryInfoUiState.userInfo) {
         var BMI: Double
-        val height: Int = uiState.userHeight.toInt()
-        val weight: Int = uiState.userWeight.toInt()
-        BMI = (weight/(height*height)).toDouble()
+        val height: Double = uiState.userHeight.toDouble()
+        val weight: Double = uiState.userWeight.toDouble()
+        BMI = weight * 10000 / (height * height)
+        Log.d("bmi", "$BMI")
         entryInfoUiState = entryInfoUiState.copy(userInfo = uiState.copy(userBmi = BMI))
+
     }
     private fun caculateTDEE(uiState: UserInfo = entryInfoUiState.userInfo){
         val height: Int = uiState.userHeight.toInt()
@@ -68,7 +68,7 @@ class EntryInfoViewModel(
         val userActivityRate = when(uiState.userActivityRate.toInt()){
             1 -> 1.375
             2 -> 1.55
-            else -> 1.55
+            else -> 1.7
         }
         val tdee = (10 * weight + 6.25 * height - 5 * age + gender) * userActivityRate
         Log.d("tdeecaculate", "success")
@@ -127,8 +127,7 @@ fun UserInfo.toUser(): User = User(
 fun formatDouble(n: Double): Double{
     return round(n*10)/10
 }
-data class navUiState(
-    val id: Int = 1,
-    val firstTime: Int = 0
+data class AppInfoState(
+    var firstTime: Int = 0
 )
 

@@ -33,6 +33,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -69,7 +70,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.0")
     ksp("androidx.room:room-compiler:2.5.0")
 
-    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation("com.google.code.gson:gson:2.8.9")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -78,4 +79,12 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
+    // CORE
+    implementation("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
+    implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0-alpha03")
+
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
 }

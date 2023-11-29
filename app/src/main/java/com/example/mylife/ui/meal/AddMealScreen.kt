@@ -1,6 +1,7 @@
 package com.example.mylife.ui.meal
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,20 +40,19 @@ object AddMealDestination : navigationDestination {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMealScreen(navigateToListMeal: () -> Unit,
-                  navigateToUser: () -> Unit,
-                  navigateToHome: () -> Unit,
-                  navigateToEachMeal: (Int) -> Unit,
-                  navigateToMain: () -> Unit ,
-                  viewModel: MealEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
-                  ){
+fun AddMealScreen(
+    navigateToListMeal: () -> Unit,
+    navigateToUser: () -> Unit,
+    navigateToHome: () -> Unit,
+    navigateToEachMeal: (Int) -> Unit,
+    viewModel: MealEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             TopBar(
-                navigateToMain = navigateToMain,
-                navigateToUserInfor=navigateToUser,
-                navigateToHome=navigateToHome,
+                navigateToUserInfor = navigateToUser,
+                navigateToHome = navigateToHome,
                 hasHome = true,
                 hasUser = true
             )
@@ -65,8 +65,12 @@ fun AddMealScreen(navigateToListMeal: () -> Unit,
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.addMeal()
+                    val latestMeal = viewModel.getLatestMeal()
+                    latestMeal?.let { meal ->
+                        Log.d("MealID", "Latest Meal ID: ${meal.meal_id}")
+                        navigateToEachMeal(meal.meal_id)
+                    }
                 }
-                navigateToEachMeal(viewModel.mealEntryUiState.numberOfMeal)
             }
         )
     }
@@ -86,7 +90,7 @@ fun AddMealBody(
     Spacer(modifier = Modifier.height(30.dp))
     Column {
         Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(65.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             Text(
                 text = "ADD MORE MEAL:",
                 fontSize = 25.sp,
@@ -108,11 +112,11 @@ fun AddMealBody(
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 Button(
-                    onClick = onSaveClick ,
-
+                    onClick = onSaveClick,
                     modifier = Modifier
                         .align(Alignment.End) // Đặt nút ở góc trên bên phải
-                        .padding(16.dp)) {
+                        .padding(16.dp)
+                ) {
                     Text(text = "ADD")
                 }
             }

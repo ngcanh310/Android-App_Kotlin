@@ -1,6 +1,7 @@
 package com.example.mylife.ui.home
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mylife.data.Activity.UserActivity
@@ -8,7 +9,7 @@ import com.example.mylife.data.Activity.UserActivityRepository
 import com.example.mylife.data.Meal.Meal
 import com.example.mylife.data.Meal.MealRepository
 import com.example.mylife.data.User.UserRepository
-import com.example.mylife.ui.information.formatDouble
+import com.example.mylife.ui.meal.getCurrentDate
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -21,8 +22,9 @@ class HomeViewModel(
 ) : ViewModel() {
     val homeUiState: StateFlow<HomeUiState> =
         userRepository.getUser(1)
-            .combine(mealRepository.getMealForToday())
+            .combine(mealRepository.getMealForDate(getCurrentDate()))
             { user, mealList ->
+                Log.d("mealList", "$mealList")
                 HomeUiState(
                     mealList = mealList,
                     userDetail = UserDetail(
@@ -34,7 +36,8 @@ class HomeViewModel(
                         ), consumeNutrition = caculateConsume(mealList)
                     )
                 )
-            }.combine(userActivityRepository.getActivityForToday()) { combined, activityList ->
+            }
+            .combine(userActivityRepository.getActivityForDate(getCurrentDate())) { combined, activityList ->
                 combined.copy(
                     userDetail = combined.userDetail.copy(
                         activityCalories = caculateActivityCalories(activityList)
@@ -48,6 +51,7 @@ class HomeViewModel(
             )
 
     private fun caculateConsume(mealList: List<Meal>): Nutrition {
+        Log.d("caculate consume", "caculated")
         var calories: Double = 0.0
         var protein: Double = 0.0
         var carb: Double = 0.0
@@ -59,7 +63,7 @@ class HomeViewModel(
             fat += meal.meal_fat
         }
 
-        return Nutrition(formatDouble(calories), formatDouble(protein), formatDouble(carb), formatDouble(fat))
+        return Nutrition(calories, protein, carb, fat)
     }
 
     private fun caculateActivityCalories(activityList: List<UserActivity>): Double {

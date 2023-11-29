@@ -1,6 +1,5 @@
 package com.example.mylife.data.Food
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -12,9 +11,14 @@ data class Food(
     var food_calories: Double,
     var food_protein: Double,
     var food_carb: Double,
-    var food_fat: Double
-){
-    fun matchSearch(query: String): Boolean{
+    var food_fat: Double,
+    var is_favorite: Boolean = false,
+) {
+    fun matchSearch(query: String): Boolean {
         return food_name.contains(query)
+    }
+
+    fun favoriteSearch(): Boolean {
+        return is_favorite == true
     }
 }

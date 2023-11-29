@@ -18,7 +18,7 @@ class OfflineMealRepository(private val mealDao: MealDao) : MealRepository {
 
     override fun getServingFromMeal(id: Int): Flow<List<Serving>> = mealDao.getServingFromMeal(id)
 
-    override fun getMealForToday(): Flow<List<Meal>> = mealDao.getMealForToday()
+    override fun getMealForDate(date: String): Flow<List<Meal>> = mealDao.getMealForToday(date)
 
     override fun getLatestMeal(): Flow<Meal> = mealDao.getLatestMeal()
 }

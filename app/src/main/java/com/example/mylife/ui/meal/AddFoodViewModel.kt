@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 
 class AddFoodViewModel(
@@ -23,7 +24,8 @@ class AddFoodViewModel(
     private val servingRepository: ServingRepository,
     private val foodRepository: FoodRepository
 ): ViewModel() {
-    private val mealId: Int = checkNotNull(savedStateHandle[AddFoodDestination.mealIdArg])
+    val mealId: Int = checkNotNull(savedStateHandle[AddFoodDestination.mealIdArg])
+
     private var _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
@@ -31,7 +33,8 @@ class AddFoodViewModel(
 
     private var _foods = MutableStateFlow(foodRepository.getAllFoodStream())
     val foods = searchText
-        .combine(_foods){
+        .debounce(1000L)
+        .combine(_foods) {
             text, foods ->
             if(text.isBlank()){
                 listOf()
@@ -72,6 +75,10 @@ class AddFoodViewModel(
                 )
             )
         }
+    }
+
+    suspend fun favoriteFood(food: Food) {
+        foodRepository.updateFood(food.copy(is_favorite = true))
     }
 
     suspend fun addServing() {

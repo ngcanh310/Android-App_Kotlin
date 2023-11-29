@@ -20,11 +20,11 @@ class EachMealViewModel(
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     val mealId: Int = checkNotNull(savedStateHandle[EachMealDestination.mealIdArg])
-
     val eachMealUiState: StateFlow<EachMealUiState> =
         mealRepository.get_Meal(mealId)
             .combine(mealRepository.getServingFromMeal(mealId)) { meal, servingList ->
                 EachMealUiState(
+                    mealId = meal.meal_id,
                     mealName = meal.meal_name,
                     nutrition = caculateNutrition(servingList),
                     creationDate = meal.creationDate,
@@ -56,20 +56,25 @@ class EachMealViewModel(
         )
     }
 
-    suspend fun updateMeal(){
-        mealRepository.update_meal(eachMealUiState.value.toMeal(mealId))
+    suspend fun updateMeal(uiState: EachMealUiState) {
+        mealRepository.update_meal(uiState.toMeal())
+    }
+
+    suspend fun deleteFood(serving: Serving) {
+        servingRepository.deleteServing(serving)
     }
 
 }
 
 data class EachMealUiState(
+    val mealId: Int = 1,
     val mealName: String = "",
     val nutrition: Nutrition = Nutrition(0.0, 0.0, 0.0, 0.0),
     val creationDate: String? = "",
     val servingList: List<Serving> = listOf()
 )
 
-fun EachMealUiState.toMeal(mealId: Int): Meal = Meal(
+fun EachMealUiState.toMeal(): Meal = Meal(
     meal_name = mealName,
     meal_calories = nutrition.calories,
     meal_fat = nutrition.fat,

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mylife.ui.home.Nutrition
 import com.example.mylife.ui.home.UserDetail
+import com.example.mylife.ui.information.formatDouble
 
 // bảng hiển thị kcal in và out trong 1 ngày
 // số kcal chênh lệch nằm trong kcal total
@@ -56,7 +57,14 @@ fun YourKcal(modifier: Modifier, userDetail: UserDetail) {
     ) {
         infIn(userDetail.consumeNutrition)
         Spacer(modifier = Modifier.width(35.dp))
-        infNeed(userDetail.targetNutrition)
+        infNeed(
+            Nutrition(
+                formatDouble(userDetail.targetNutrition.calories - userDetail.consumeNutrition.calories + userDetail.activityCalories),
+                userDetail.targetNutrition.protein - userDetail.consumeNutrition.protein,
+                userDetail.targetNutrition.protein - userDetail.consumeNutrition.protein,
+                userDetail.targetNutrition.protein - userDetail.consumeNutrition.protein,
+            )
+        )
         Spacer(modifier = Modifier.width(35.dp))
         infOut(userDetail.activityCalories)
     }

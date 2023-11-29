@@ -9,6 +9,7 @@ data class Activity(
     var activity_id: Int,
     var activity_name: String,
     var calories_consume: Double,
+    var is_favorite: Boolean = false,
 ) {
     fun matchSearch(query: String): Boolean {
         return activity_name.contains(query)

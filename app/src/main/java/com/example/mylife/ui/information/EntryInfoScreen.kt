@@ -1,36 +1,22 @@
 package com.example.mylife.ui.information
 
 import android.annotation.SuppressLint
-import android.text.Editable.Factory
 import android.util.Log
-import android.widget.RadioGroup
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,28 +28,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylife.R
 import com.example.mylife.TopBar
 import com.example.mylife.navigation.navigationDestination
 import com.example.mylife.reuse.EditNumberField
 import com.example.mylife.ui.AppViewModelProvider
-import com.example.mylife.ui.home.HomeDestination
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 // sau khi người dùng đăng ký tài khoản, đây là trang để họ điền thông tin cụ thể
@@ -95,6 +74,7 @@ fun UpProfileBody(
     navigateToHome: () -> Unit,
     viewModel: EntryInfoViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ){
+    var errorText by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -170,39 +150,69 @@ fun UpProfileBody(
                     .fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(15.dp))
-            GoalRadioGroupExample(onValueChange = viewModel::updateUiState, userInfo = viewModel.entryInfoUiState.userInfo)
-            ActivityRateRadioGroupExample(onValueChange = viewModel::updateUiState, userInfo = viewModel.entryInfoUiState.userInfo)
+            GoalRadioGroupExample(
+                onValueChange = viewModel::updateUiState,
+                userInfo = viewModel.entryInfoUiState.userInfo
+            )
+            ActivityRateRadioGroupExample(
+                onValueChange = viewModel::updateUiState,
+                userInfo = viewModel.entryInfoUiState.userInfo
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            Box(
+            if (errorText) {
+                Text("Please enter validate input", fontWeight = FontWeight.Bold, color = Color.Red)
+            }
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize(Center)
             ) {
+
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            viewModel.saveUser()
-                            viewModel.updateAppInfo()
-                            Log.d("SaveUser", "userSaved: ${viewModel.entryInfoUiState.userInfo.toUser()}")
-                            navigateToHome()
+                            if (areFieldsFilledEntry(viewModel.entryInfoUiState.userInfo)) {
+                                viewModel.saveUser()
+                                navigateToHome()
+                                errorText = false
+                            } else {
+                                errorText = true
+                            }
                         }
                     },
-                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp,  20.dp)
-                    ) {
+                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 20.dp)
+                ) {
                     Text(text = "Update now")
                 }
             }
+
         }
     }
 }
 
-// Hàm kiểm tra xem cả hai trường có được điền đầy đủ hay không, nếu điền đủ thông tin thì mới có thể bấm UPDATE NOW
-fun areFieldsFilledEntry(nameUser: String, age: String, height: String, weight: String): Boolean {
-    return nameUser.isNotBlank() && age.isNotBlank() && height.isNotBlank() && weight.isNotBlank()
+fun areFieldsFilledEntry(userInfo: UserInfo): Boolean {
+    return checkStringInput(userInfo.userName) && checkStringInput(userInfo.userGender) && checkDigitInput(
+        userInfo.userAge
+    ) && checkDigitInput(userInfo.userHeight) && checkDigitInput(userInfo.userWeight) && checkStringInput(
+        userInfo.userActivityRate
+    ) && checkStringInput(userInfo.userAim)
+}
+
+fun checkStringInput(input: String): Boolean {
+    return input.isNotBlank()
+}
+
+fun checkDigitInput(input: String): Boolean {
+    return input.isNotBlank() && input.isDigitsOnly()
 }
 
 @Composable
-fun RadioOption(text: String, optionValue: Int, selectedOption: Int, onOptionSelected: (Int) -> Unit) {
+fun RadioOption(
+    text: String,
+    optionValue: Int,
+    selectedOption: Int,
+    onOptionSelected: (Int) -> Unit
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         RadioButton(
             selected = optionValue == selectedOption,

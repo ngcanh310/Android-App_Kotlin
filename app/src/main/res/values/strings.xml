@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">My Life</string>
     <string name="login">Your acount</string>
     <string name="pass">Your password</string>
@@ -14,9 +14,9 @@
     <string name = "age">Your Age</string>
     <string name = "gender">Gender</string>
     <string name = "height">Height(Cm)</string>
-    <string name = "food">Food</string>
-    <string name = "weight">Weight(Kg)</string>
-    <string name = "goal">Your Goal</string>
+    <string name="food">Food</string>
+    <string name="weight">Weight(Kg)</string>
+    <string name="goal">Your Goal</string>
     <string name="in">Kcal in</string>
     <string name="out">Kcal out</string>
     <string name="total">Total</string>
@@ -24,9 +24,15 @@
     <string name="kcal">Kcal</string>
     <string name="time">Time(minute)</string>
     <string name="search">Search</string>
+    <string name="pro">Protein</string>
+    <string name="carb">Carb</string>
+    <string name="fat">Fat</string>
 
 
     <string name="quantity">Quantity(gam)</string>
+    <string name="mealName">Meal</string>
+    <string name="activity">Activity</string>
+
 
     <string name="c1">Protein</string>
     <string name="c2">Carbohydrate</string>

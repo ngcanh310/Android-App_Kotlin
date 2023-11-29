@@ -30,11 +30,13 @@ class DetailInforViewModel(
 data class DetailUiState(
     var foodName: String = "",
     var quantity: String = "",
-    var nutrition: Nutrition = Nutrition(0.0, 0.0, 0.0, 0.0)
+    var nutrition: Nutrition = Nutrition(0.0, 0.0, 0.0, 0.0),
+    var mealId: Int = 0
 )
 
 fun Serving.toDetailUiState(): DetailUiState = DetailUiState(
     foodName = food_name,
     quantity = quantity.toString(),
-    nutrition = Nutrition(serving_calories, serving_protein, serving_carb, serving_fat)
+    nutrition = Nutrition(serving_calories, serving_protein, serving_carb, serving_fat),
+    mealId = meal_id
 )

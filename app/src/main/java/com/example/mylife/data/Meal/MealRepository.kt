@@ -18,7 +18,7 @@ interface MealRepository {
 
     fun getServingFromMeal(id: Int): Flow<List<Serving>>
 
-    fun getMealForToday(): Flow<List<Meal>>
+    fun getMealForDate(date: String): Flow<List<Meal>>
 
     fun getLatestMeal(): Flow<Meal>
 

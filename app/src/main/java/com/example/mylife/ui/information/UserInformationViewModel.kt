@@ -20,6 +20,8 @@ class UserInformationViewModel(
             }
         }
     }
+
+
 }
 data class UserInfomationUiState(
     val userInfo: UserInfo = UserInfo()
@@ -36,3 +38,4 @@ fun User.toUserInfo(): UserInfo = UserInfo(
     userTdee = user_tdee,
     userAim = user_aim.toString(),
 )
+

@@ -35,8 +35,8 @@ interface MealDao {
     @Query("SELECT * FROM serving WHERE serving.meal_id =:id")
     fun getServingFromMeal(id: Int): Flow<List<Serving>>
 
-    @Query("SELECT * FROM meal WHERE SUBSTR(creationDate, 1, 10) = SUBSTR(:currentDate, 1, 10)")
-    fun getMealForToday(currentDate: String = CurrentDateHolder.currentDate): Flow<List<Meal>>
+    @Query("SELECT * FROM meal WHERE SUBSTR(creationDate, 1, 10) = SUBSTR(:date, 1, 10)")
+    fun getMealForToday(date: String): Flow<List<Meal>>
 
     @Query("SELECT * FROM meal ORDER BY datetime(creationDate) DESC LIMIT 1")
     fun getLatestMeal(): Flow<Meal>

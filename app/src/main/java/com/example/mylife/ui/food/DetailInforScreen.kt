@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylife.R
-import com.example.mylife.TopBar
+import com.example.mylife.TopBarWithArg
 import com.example.mylife.navigation.navigationDestination
 import com.example.mylife.ui.AppViewModelProvider
 
@@ -169,19 +169,22 @@ fun TopBarAgg(navigateToHome: (Int) -> Unit = {},
 @Composable
 fun FullInforFood(
     navigateToUser: () -> Unit,
-    navigateToHome: () -> Unit,
-    navigateToMain: () -> Unit ,
+    navigateToHome: (Int) -> Unit,
+    navigateToMain: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailInforViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
-            TopBar(hasUser = true,
+            TopBarWithArg(
+                hasUser = true,
                 navigateToUserInfor = navigateToUser,
                 navigateToHome = navigateToHome,
                 navigateToMain = navigateToMain,
-                hasHome = true)
+                hasHome = true,
+                arg = uiState.mealId
+            )
         },
     ) { innerPadding ->
         FullInforFoodBody(

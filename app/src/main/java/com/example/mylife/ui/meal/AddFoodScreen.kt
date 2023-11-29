@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylife.R
-import com.example.mylife.TopBar
+import com.example.mylife.TopBarWithArg
 import com.example.mylife.data.Food.Food
 import com.example.mylife.navigation.navigationDestination
 import com.example.mylife.reuse.EditNumberField
@@ -61,21 +61,22 @@ object AddFoodDestination : navigationDestination {
 fun AddFoodScreen(
     navigateToEachMeal: (Int) -> Unit,
     navigateToUser: () -> Unit,
-    navigateToHome: () -> Unit,
     navigateToMain: () -> Unit ,
     viewModel: AddFoodViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val searchText by viewModel.searchText.collectAsState()
     val foods by viewModel.foods.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
-            TopBar(
+            TopBarWithArg(
+                navigateToHome = navigateToEachMeal,
                 navigateToMain = navigateToMain,
-                navigateToUserInfor =navigateToUser,
-                navigateToHome = navigateToHome,
+                navigateToUserInfor = navigateToUser,
                 hasHome = true,
-                hasUser = true
+                hasUser = true,
+                arg = viewModel.mealId
             )
         },
 
@@ -147,7 +148,9 @@ fun AddFoodBody(
                             LazyColumn(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(h).zIndex(2f).background(Color.White)
+                                    .height(h)
+                                    .zIndex(2f)
+                                    .background(Color.White)
                             ) {
                                 items(items = foods, key = { it.food_id }) { food ->
                                     Text(
@@ -176,7 +179,8 @@ fun AddFoodBody(
                             onValueChange = { onValueChange(uiState.copy(quantity = it)) },
                             modifier = Modifier
                                 .padding(bottom = 32.dp)
-                                .fillMaxWidth().zIndex(1f)
+                                .fillMaxWidth()
+                                .zIndex(1f)
                         )
                     }
                 }
