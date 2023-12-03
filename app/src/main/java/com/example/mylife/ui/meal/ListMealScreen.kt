@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -80,28 +81,32 @@ fun Item(
     Box(
         modifier = Modifier
             .clickable { navigateToEachMeal(meal.meal_id) }
-            .border(color = Color(0xFF473C8B), width = 2.dp, shape = RoundedCornerShape(10.dp))
+            .border(
+                color = Color(0xFF473C8B),
+                width = 2.dp,
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_10))
+            )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(dimensionResource(id = R.dimen.dp_10)),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Spacer(modifier = Modifier.width(3.dp))
+                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_3)))
                 Image(
                     painter = painterResource(R.drawable.meal),
                     contentDescription = null,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.dp_40))
                 )
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
                 Column() {
                     Text(
                         text = meal.meal_name,
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_5)))
                     Text(text = "Added at ${meal.creationDate?.substring(10, 16)}")
                 }
             }
@@ -115,7 +120,7 @@ fun Item(
             }
         }
     }
-    Spacer(modifier = Modifier.height(5.dp))
+    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_5)))
 }
 
 @Composable
@@ -224,25 +229,25 @@ fun rowItemListMealBody(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp),
+            .padding(dimensionResource(id = R.dimen.dp_20)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_40)))
         Card(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(dimensionResource(id = R.dimen.dp_20))
                 .fillMaxWidth()
                 .clickable(onClick = { calendarState.show() })
                 .shadow(
-                    elevation = 25.dp,
+                    elevation = dimensionResource(id = R.dimen.dp_24),
                     ambientColor = Color.Gray,
                     spotColor = Color.Black,
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_10))
                 ),
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_10)),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.dp_10))
         ) {
             Column(
                 modifier = Modifier
@@ -254,11 +259,11 @@ fun rowItemListMealBody(
                 Text(
                     text = "$selectedDate",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp
+                    fontSize = dimensionResource(id = R.dimen.dp_30).value.sp
                 )
             }
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
         MyLazyColumn(navigateToEachMeal, mealList, onDelete)
     }
 }

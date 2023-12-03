@@ -12,7 +12,7 @@ import java.util.Locale
 @Entity(tableName = "meal")
 data class Meal(
     @PrimaryKey(autoGenerate = true)
-    val meal_id: Int = 1,
+    val meal_id: Int = 0,
     val meal_name: String,
     val meal_calories: Double,
     val meal_protein: Double,

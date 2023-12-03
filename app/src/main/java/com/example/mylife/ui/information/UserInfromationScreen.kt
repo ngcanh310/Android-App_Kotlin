@@ -18,9 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylife.R
@@ -78,74 +78,74 @@ fun UserInformationScreenBody(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
                 horizontalAlignment = Alignment.Start
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_40)))
                 Image(painter = painterResource(R.drawable.hand), contentDescription = null)
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                 Column {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = "Name: ${userInfo.userName}",
-                            fontSize = 20.sp
+                            fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                         )
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
 
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = "Gender: $gender",
-                                fontSize = 20.sp
+                                fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                             )
-                            Spacer(modifier = Modifier.width(10.dp))
+                            Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
 
                         }
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                         Column {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
                                     text = "Age: ${userInfo.userAge}",
-                                    fontSize = 20.sp
+                                    fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                                 )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
 
                             }
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                             Column {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
                                         text = "Height: ${userInfo.userHeight}",
-                                        fontSize = 20.sp
+                                        fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                                     )
-                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
 
                                 }
-                                Spacer(modifier = Modifier.height(20.dp))
+                                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                                 Column {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Text(
                                             text = "Weight: ${userInfo.userWeight}",
-                                            fontSize = 20.sp
+                                            fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                                         )
-                                        Spacer(modifier = Modifier.width(10.dp))
+                                        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
 
                                     }
-                                    Spacer(modifier = Modifier.height(20.dp))
+                                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                                     Column {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                             Text(
                                                 text = "Your Activity Rate: $activityRate ",
-                                                fontSize = 20.sp
+                                                fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                                             )
-                                            Spacer(modifier = Modifier.width(10.dp))
+                                            Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
 
                                         }
-                                        Spacer(modifier = Modifier.height(20.dp))
+                                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                                         Column {
                                             var BMIstatus: String =
                                                 if (userInfo.userBmi < 18.5) "UnderWeight" else if (userInfo.userBmi < 25) "Normal" else if (userInfo.userBmi < 30) "OverWeight" else "Obese"
@@ -153,27 +153,33 @@ fun UserInformationScreenBody(
                                             Row(verticalAlignment = Alignment.CenterVertically) {
                                                 Text(
                                                     text = "BMI = ${userInfo.userBmi} ($BMIstatus)",
-                                                    fontSize = 20.sp
+                                                    fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                                                 )
                                             }
                                         }
-                                        Spacer(modifier = Modifier.height(20.dp))
+                                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
                                         Column {
                                             Row(verticalAlignment = Alignment.CenterVertically) {
                                                 Text(
                                                     text = "Goal: $goal",
-                                                    fontSize = 20.sp
+                                                    fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
                                                 )
-                                                Spacer(modifier = Modifier.width(10.dp))
+                                                Spacer(
+                                                    modifier = Modifier.width(
+                                                        dimensionResource(
+                                                            id = R.dimen.dp_10
+                                                        )
+                                                    )
+                                                )
 
                                             }
-                                            Spacer(modifier = Modifier.height(20.dp))
+                                            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
 
                                         }
                                         Column(
                                             horizontalAlignment = Alignment.End,
                                             modifier = Modifier
-                                                .padding(15.dp)
+                                                .padding(dimensionResource(id = R.dimen.dp_15))
                                                 .fillMaxWidth()
                                         ) {
                                             Button(

@@ -14,11 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
@@ -43,15 +43,15 @@ fun CustomDialog(
         )
     ) {
         Card(
-            shape = RoundedCornerShape(15.dp),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_15)),
             modifier = Modifier
                 .fillMaxWidth(0.95f)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
-                verticalArrangement = Arrangement.spacedBy(25.dp)
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_24))
             ) {
                 Text(
                     text = "${uiState.activity.activity_name}",
@@ -63,7 +63,7 @@ fun CustomDialog(
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_15))
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -78,7 +78,7 @@ fun CustomDialog(
                             value = uiState.time,
                             onValueChange = { onValueChange(uiState.copy(time = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -103,7 +103,7 @@ fun CustomDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_30)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
@@ -170,23 +170,23 @@ fun CustomActivityDialog(
         )
     ) {
         Card(
-            shape = RoundedCornerShape(15.dp),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_15)),
             modifier = Modifier
                 .fillMaxWidth(0.95f)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
-                verticalArrangement = Arrangement.spacedBy(25.dp)
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_24))
             ) {
                 Text(
-                    text = "Add your own activity",
+                    text = "Add your own activity (calories per 30 minutes)",
                     textAlign = TextAlign.Center
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_15))
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -195,31 +195,13 @@ fun CustomActivityDialog(
                         EditNumberField(
                             label = R.string.activity,
                             keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Number,
+                                keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Done
                             ),
                             value = uiState.activity,
                             onValueChange = { onValueChange(uiState.copy(activity = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
-                                .fillMaxWidth()
-                                .zIndex(1f)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        EditNumberField(
-                            label = R.string.time,
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Done
-                            ),
-                            value = uiState.time,
-                            onValueChange = { onValueChange(uiState.copy(time = it)) },
-                            modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -237,7 +219,7 @@ fun CustomActivityDialog(
                             value = uiState.calories,
                             onValueChange = { onValueChange(uiState.copy(calories = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -255,7 +237,7 @@ fun CustomActivityDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_30)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
@@ -278,7 +260,134 @@ fun CustomActivityDialog(
                     }
                     Button(
                         onClick = {
-                            if (uiState.time.isEmpty() || uiState.time.toIntOrNull() == null || uiState.activity.isEmpty() || uiState.calories.isEmpty() || uiState.calories.toDoubleOrNull() == null) {
+                            if (uiState.activity.isEmpty() || uiState.calories.isEmpty() || uiState.calories.toDoubleOrNull() == null) {
+                                showError = true
+                            } else {
+                                onConfirm()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Confirm",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun EditCustomDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    uiState: EditActivity,
+    onValueChange: (EditActivity) -> Unit = {},
+) {
+    var showError by remember { mutableStateOf(false) }
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Card(
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_15)),
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_24))
+            ) {
+                Text(
+                    text = "${uiState.activity_name}",
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Please enter time",
+                    textAlign = TextAlign.Center
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_15))
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        EditNumberField(
+                            label = R.string.time,
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done
+                            ),
+                            value = uiState.time,
+                            onValueChange = { onValueChange(uiState.copy(time = it)) },
+                            modifier = Modifier
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
+                                .fillMaxWidth()
+                                .zIndex(1f)
+                        )
+
+                    }
+                    Divider()
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Kcal: ${uiState.calories}", fontWeight = FontWeight.Bold)
+                    }
+                    if (showError) {
+                        Text(
+                            "Please enter validate input",
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Red
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_30)),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            if (uiState.time.isEmpty() || uiState.time.toIntOrNull() == null) {
                                 showError = true
                             } else {
                                 onConfirm()

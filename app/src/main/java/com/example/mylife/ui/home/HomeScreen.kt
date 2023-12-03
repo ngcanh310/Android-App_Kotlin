@@ -22,9 +22,13 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,46 +61,6 @@ object HomeDestination : navigationDestination {
     override val titleRes = R.string.HOME
 }
 
-@Composable
-fun Food(navigateToListFood: () -> Unit,){
-    Card(
-        modifier = Modifier
-            .padding(20.dp, 20.dp, 20.dp, 0.dp)
-            .fillMaxWidth()
-            .clickable(onClick = navigateToListFood)
-            .shadow(
-                elevation = 25.dp,
-                ambientColor = Color.Gray,
-                spotColor = Color.Black,
-                shape = RoundedCornerShape(10.dp)
-            ),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-    )
-    {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row {
-                Image(
-                    painter = painterResource(R.drawable.food),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Column {
-                    Text(
-                        text = stringResource(R.string.food),
-                        )
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun Activity(
@@ -102,32 +68,37 @@ fun Activity(
 ) {
     Card(
         modifier = Modifier
-            .padding(20.dp, 20.dp, 20.dp, 0.dp)
+            .padding(
+                dimensionResource(id = R.dimen.padding_medium),
+                dimensionResource(id = R.dimen.padding_medium),
+                dimensionResource(id = R.dimen.padding_medium),
+                0.dp
+            )
             .fillMaxWidth()
             .clickable(onClick = navigateToListExer)
             .shadow(
-                elevation = 25.dp,
+                elevation = dimensionResource(id = R.dimen.padding_medium),
                 ambientColor = Color.Gray,
                 spotColor = Color.Black,
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.round_small))
             ),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.round_small)),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.padding_small))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(dimensionResource(id = R.dimen.padding_small)),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row {
                 Image(
                     painter = painterResource(R.drawable.exercise),
                     contentDescription = null,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.padding_extra_large))
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.space_tiny)))
                 Column {
                     Text(
                         text = stringResource(R.string.exercise),
@@ -144,18 +115,23 @@ fun Activity(
 fun Meal(navigateToListMeal: () -> Unit,){
     Card(
         modifier = Modifier
-            .padding(20.dp, 20.dp, 20.dp, 0.dp)
+            .padding(
+                dimensionResource(id = R.dimen.padding_medium),
+                dimensionResource(id = R.dimen.padding_medium),
+                dimensionResource(id = R.dimen.padding_medium),
+                0.dp
+            )
             .fillMaxWidth()
             .clickable(onClick = navigateToListMeal)
             .shadow(
-                elevation = 25.dp,
+                elevation = dimensionResource(id = R.dimen.padding_medium),
                 ambientColor = Color.Gray,
                 spotColor = Color.Black,
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.round_small))
             ),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.round_small)),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.padding_small))
     )
     {
         Row(
@@ -190,6 +166,7 @@ fun HomeScreen(
     navigateToUser: () -> Unit,
     navigateToListMeal: () -> Unit,
     navigateToFood: () -> Unit,
+    navigateToFoodvisor: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -203,11 +180,23 @@ fun HomeScreen(
     }
     Scaffold(
         topBar = {
-            TopBar(hasUser = true,
+            TopBar(
+                hasUser = true,
                 navigateToUserInfor = navigateToUser,
                 hasHome = false,
-                home=false)
+                home = false
+            )
         },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToFoodvisor,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null
+                )
+            }
+        }
     ) { innerPadding ->
         HomeScreenBody(
             navigateToListExer,
@@ -222,24 +211,27 @@ fun HomeScreen(
 fun goal(userDetail: UserDetail) {
     Card(
         modifier = Modifier
-            .padding(20.dp, 20.dp, 20.dp, 0.dp)
-            .fillMaxSize()
+            .padding(
+                dimensionResource(id = R.dimen.padding_medium),
+                dimensionResource(id = R.dimen.padding_medium),
+                dimensionResource(id = R.dimen.padding_medium),
+                0.dp
+            )
+            .fillMaxWidth()
             .shadow(
-                elevation = 25.dp,
+                elevation = dimensionResource(id = R.dimen.padding_medium),
                 ambientColor = Color.Gray,
                 spotColor = Color.Black,
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.round_small))
             ),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.round_small)),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.padding_small))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -250,18 +242,18 @@ fun goal(userDetail: UserDetail) {
                     var remain =
                         userDetail.targetNutrition.calories - userDetail.consumeNutrition.calories + userDetail.activityCalories
                     if (remain >= -50 && remain <= 50) {
+                        Text(text = "Congrats! You completed today's diet")
                         Image(
                             painter = painterResource(R.drawable.success),
                             contentDescription = null,
-                            modifier = Modifier.size(120.dp)
+                            modifier = Modifier.size(40.dp)
                         )
-                    } else {
+                    } else if (remain > 50) {
                         Text(text = "Keep it up! You're almost done with your diet")
                     }
                 }
             }
 
-        }
     }
 }
 
@@ -287,11 +279,11 @@ fun HomeScreenBody(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_extra_large)))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = dimensionResource(id = R.dimen.padding_medium)),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -302,7 +294,7 @@ fun HomeScreenBody(
                 infOut(userDetail.activityCalories)
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_big)))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -325,37 +317,39 @@ fun HomeScreenBody(
                 )
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_big)))
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        Color(0xFF473C8B),
+                        colorResource(id = R.color.theme_color),
                         shape = RoundedCornerShape(
-                            topStart = 30.dp,
-                            topEnd = 30.dp,
+                            topStart = dimensionResource(id = R.dimen.round_large),
+                            topEnd = dimensionResource(id = R.dimen.round_large),
                             bottomStart = 0.dp,
                             bottomEnd = 0.dp
                         )
                     )
-                    .padding(50.dp, 40.dp)
+                    .padding(
+                        dimensionResource(id = R.dimen.padding_extra_large), dimensionResource(
+                            id = R.dimen.padding_large
+                        )
+                    )
             ) {
                 Box(
                     modifier = Modifier
-                        .background(Color.White, RoundedCornerShape(40.dp))
+                        .background(Color.White, RoundedCornerShape(10))
                         .aspectRatio(1f)
                         .fillMaxSize()
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp)
+                            .padding(dimensionResource(id = R.dimen.padding_15))
                     ) {
                         Activity(navigateToListExer)
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_tiny)))
                         Meal(navigateToListMeal)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        goal(userDetail)
                     }
                 }
             }

@@ -15,7 +15,7 @@ interface FoodDao {
     suspend fun updateFood(food: Food)
 
     @Query("SELECT * from food")
-    fun getAllFood(): List<Food>
+    fun getAllFood(): Flow<List<Food>>
 
     @Query("SELECT * from food WHERE food_id = :id")
     fun getFood(id: Int): Flow<Food>

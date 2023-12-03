@@ -56,7 +56,7 @@ class AddMealViewModel(
     }
 
     suspend fun addMeal() {
-        mealRepository.insert_meal(Meal(1, mealName, 0.0, 0.0, 0.0, 0.0, getCurrentDate()))
+        mealRepository.insert_meal(Meal(0, mealName, 0.0, 0.0, 0.0, 0.0, getCurrentDate()))
     }
 
     fun updateMealName(value: String) {

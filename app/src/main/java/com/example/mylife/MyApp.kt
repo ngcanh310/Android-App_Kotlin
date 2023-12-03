@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.*
 import androidx.navigation.compose.rememberNavController
@@ -45,7 +47,7 @@ fun TopBar(navigateToHome: () -> Unit = {},
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(0xFF473C8B))
+            .background(color = colorResource(id = R.color.theme_color))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -75,10 +77,10 @@ fun TopBar(navigateToHome: () -> Unit = {},
             ) {
                 Text(
                     text = "MyLife",
-                    fontSize = 30.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_large).value.sp,
                     modifier = Modifier.align(Alignment.CenterVertically),
 
-                    color = Color.White
+                    color = colorResource(id = R.color.white)
                 )
             }
 
@@ -87,7 +89,7 @@ fun TopBar(navigateToHome: () -> Unit = {},
                     Icon(
                         imageVector = Icons.Filled.AccountCircle,
                         contentDescription = null,
-                        tint = Color.White
+                        tint = colorResource(id = R.color.white)
                     )
                 }
             }
@@ -96,7 +98,7 @@ fun TopBar(navigateToHome: () -> Unit = {},
                     Icon(
                         imageVector = Icons.Filled.Call,
                         contentDescription = null,
-                        tint = Color.White
+                        tint = colorResource(id = R.color.white)
                     )
                 }
             }
@@ -119,7 +121,7 @@ fun TopBarWithArg(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(0xFF473C8B))
+            .background(color = colorResource(id = R.color.theme_color))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -149,7 +151,7 @@ fun TopBarWithArg(
             ) {
                 Text(
                     text = "MyLife",
-                    fontSize = 30.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_large).value.sp,
                     modifier = Modifier.align(Alignment.CenterVertically),
 
                     color = Color.White

@@ -30,6 +30,9 @@ class MealEntryViewModel(
         mealRepository.insert_meal(mealEntryUiState.toMeal())
     }
 
+    fun updateFoodUpdateUiState() {
+
+    }
 }
 
 data class MealEntryUiState(

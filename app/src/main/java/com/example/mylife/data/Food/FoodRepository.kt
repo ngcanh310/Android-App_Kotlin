@@ -3,7 +3,7 @@ package com.example.mylife.data.Food
 import kotlinx.coroutines.flow.Flow
 
 interface FoodRepository {
-    fun getAllFoodStream(): List<Food>
+    fun getAllFoodStream(): Flow<List<Food>>
 
     fun getFoodStream(id: Int): Flow<Food>
 

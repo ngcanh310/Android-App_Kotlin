@@ -33,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -65,29 +66,36 @@ fun ActivityItem(
         modifier = Modifier
             .fillMaxWidth()
             .border(2.dp, Color(0xFF473C8B))
-            .padding(10.dp),
+            .padding(dimensionResource(id = R.dimen.dp_10)),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                .padding(end = dimensionResource(id = R.dimen.dp_10)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_10)),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_10))
             ) {
-                Text(text = item.activity_name, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text(text = "Calories: ${formatDouble(item.calories_consume)}g ", fontSize = 15.sp)
+                Text(
+                    text = item.activity_name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = dimensionResource(id = R.dimen.font_medium).value.sp
+                )
+                Text(
+                    text = "Calories: ${formatDouble(item.calories_consume)}g ",
+                    fontSize = dimensionResource(id = R.dimen.font_small).value.sp
+                )
             }
             IconButton(onClick = { onAddActivity(item) }) {
                 Icon(
                     imageVector = Icons.Outlined.AddCircle,
                     contentDescription = null,
                     tint = Color.Gray,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.dp_20))
                 )
             }
             IconButton(onClick = { setFavorite(item) }) {
@@ -97,14 +105,14 @@ fun ActivityItem(
                         imageVector = Icons.Default.FavoriteBorder,
                         contentDescription = null,
                         tint = Color.Red,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.dp_20))
                     )
                 } else {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = null,
                         tint = Color.Red,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.dp_20))
                     )
                 }
             }
@@ -119,7 +127,6 @@ fun AddActivityColumn(
     searchTextChange: (String) -> Unit,
     setFavorite: (Activity) -> Unit,
     onAddActivity: (Activity) -> Unit,
-    isSearching: Boolean
 ) {
     Column {
         EditNumberField(
@@ -131,10 +138,10 @@ fun AddActivityColumn(
             value = searchText,
             onValueChange = searchTextChange,
             modifier = Modifier
-                .padding(bottom = 32.dp)
+                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                 .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_15)))
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -158,22 +165,25 @@ fun rowItemActivityBody(
     searchTextChange: (String) -> Unit = {},
     setFavorite: (Activity) -> Unit,
     onAddActivity: (Activity) -> Unit,
-    isSearching: Boolean
 ) {
     Column() {
 
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_60)))
         Column(
             horizontalAlignment = Alignment.End,
-            modifier = Modifier.padding(20.dp, 0.dp, 20.dp, 0.dp)
+            modifier = Modifier.padding(
+                dimensionResource(id = R.dimen.dp_20),
+                0.dp,
+                dimensionResource(id = R.dimen.dp_20),
+                0.dp
+            )
         ) {
             AddActivityColumn(
                 activity,
                 searchText,
                 searchTextChange,
-                {},
+                setFavorite,
                 onAddActivity,
-                isSearching
             )
         }
     }
@@ -220,14 +230,17 @@ fun AddExerciseScreen(
             searchText = searchText,
             activity = activity,
             searchTextChange = viewModel::onSearchChange,
-            setFavorite = {},
+            setFavorite = {
+                coroutineScope.launch {
+                    viewModel.setFavorite(it)
+                }
+            },
             onAddActivity = {
                 coroutineScope.launch {
                     viewModel.getActivity(it)
                 }
                 viewModel.onAddActivityClick()
             },
-            isSearching
         )
     }
     if (viewModel.isDialogShown) {
@@ -255,7 +268,7 @@ fun AddExerciseScreen(
                 viewModel.onDismissCustomDialog()
                 coroutineScope.launch {
                     viewModel.addCustomActivity()
-                    navigateToActivity()
+                    viewModel.updateActivities()
                 }
             },
             uiState = viewModel.customActivity,

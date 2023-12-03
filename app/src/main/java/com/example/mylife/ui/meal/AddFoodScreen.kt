@@ -19,14 +19,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,13 +36,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mylife.R
-import com.example.mylife.TopBarWithArg
 import com.example.mylife.data.Food.Food
 import com.example.mylife.navigation.navigationDestination
 import com.example.mylife.reuse.EditNumberField
 import com.example.mylife.ui.AppViewModelProvider
 import com.example.mylife.ui.home.Nutrition
-import kotlinx.coroutines.launch
 
 object AddFoodDestination : navigationDestination {
     override val route = "navigateAddFood"
@@ -64,7 +59,7 @@ fun AddFoodScreen(
     navigateToMain: () -> Unit ,
     viewModel: AddFoodViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val searchText by viewModel.searchText.collectAsState()
+   /* val searchText by viewModel.searchText.collectAsState()
     val foods by viewModel.foods.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -99,7 +94,7 @@ fun AddFoodScreen(
                 }
             }
         )
-    }
+    }*/
 
 }
 

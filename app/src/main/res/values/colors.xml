@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#E61616</color>
     <color name="topbar">#00af50</color>
+    <color name="piechart_consumed">#13068F</color>
+    <color name="piechart_remain">#D6D1E6</color>
+    <color name="piechart_consumed_secondary">#D6D1E6</color>
+    <color name="theme_color">#473C8B</color>
 </resources>

@@ -46,7 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -149,7 +149,6 @@ fun MyLazyColumn(
     filter: FilterType,
     setFavorite: (Food) -> Unit,
     onAddFood: (Food) -> Unit,
-    isSearching: Boolean
 
 ) {
     Column {
@@ -162,21 +161,20 @@ fun MyLazyColumn(
             value = searchText,
             onValueChange = searchTextChange,
             modifier = Modifier
-                .padding(bottom = 32.dp)
+                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                 .fillMaxWidth()
         )
         DropDownMenu(filterChange, filter)
-        Spacer(modifier = Modifier.height(15.dp))
-        if (searchText != "") {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                items(items = foods, key = { it.food_id }) { food ->
-                    Item(food, setFavorite, onAddFood)
-                }
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_15)))
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            items(items = foods, key = { it.food_id }) { food ->
+                Item(food, setFavorite, onAddFood)
             }
         }
+
     }
 }
 
@@ -188,12 +186,12 @@ fun rowItemFood(
     navigateToUser: () -> Unit,
     navigateToMain: () -> Unit,
     viewModel: FoodListViewModel = viewModel(factory = AppViewModelProvider.Factory),
+
 ) {
     val searchText by viewModel.searchText.collectAsState()
     val foods by viewModel.foods.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val filterState by viewModel.filterState.collectAsState()
-    val isSearching by viewModel.isSearching.collectAsState()
     Scaffold(
         topBar = {
             TopBarWithArg(
@@ -214,6 +212,7 @@ fun rowItemFood(
                     contentDescription = null
                 )
             }
+
         },
 
         ) { innerPadding ->
@@ -234,7 +233,6 @@ fun rowItemFood(
                 }
                 viewModel.onAddFoodClick()
             },
-            isSearching
         )
     }
     if (viewModel.isDialogShown) {
@@ -256,13 +254,14 @@ fun rowItemFood(
     if (viewModel.isDialogCustomShown) {
         CustomFoodDialog(
             onDismiss = {
-                viewModel.onDismissDialog()
+                viewModel.onDismissCustomDialog()
             },
             onConfirm = {
-                viewModel.onDismissDialog()
+                viewModel.onDismissCustomDialog()
                 coroutineScope.launch {
                     viewModel.addCustomFood()
-                    navigateToEachMeal(viewModel.foodListUiState.mealId)
+                    viewModel.updateFoods()
+                    Log.d("custom food", "${viewModel.customFood}")
                 }
             },
             uiState = viewModel.customFood,
@@ -280,14 +279,18 @@ fun rowItemFoodBody(
     filter: FilterType,
     setFavorite: (Food) -> Unit,
     onAddFood: (Food) -> Unit,
-    isSearching: Boolean
 ) {
     Column() {
 
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_60)))
         Column(
             horizontalAlignment = Alignment.End,
-            modifier = Modifier.padding(20.dp, 0.dp, 20.dp, 0.dp)
+            modifier = Modifier.padding(
+                dimensionResource(id = R.dimen.dp_20),
+                0.dp,
+                dimensionResource(id = R.dimen.dp_20),
+                0.dp
+            )
         ) {
             MyLazyColumn(
                 foods,
@@ -297,7 +300,6 @@ fun rowItemFoodBody(
                 filter,
                 setFavorite,
                 onAddFood,
-                isSearching
             )
         }
     }
@@ -374,7 +376,6 @@ fun DropDownMenu(
     filterChange: (FilterType) -> Unit,
     filter: FilterType
 ) {
-    val context = LocalContext.current
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -387,7 +388,7 @@ fun DropDownMenu(
             modifier = Modifier
                 .border(1.dp, Color.DarkGray)
                 .background(Color.White)
-                .padding(8.dp)
+                .padding(dimensionResource(id = R.dimen.dp_10))
                 .clickable { expanded = !expanded },
             contentAlignment = Alignment.Center
         ) {

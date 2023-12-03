@@ -14,6 +14,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.mylife.R
 import com.example.mylife.ui.AppViewModelProvider
+import com.example.mylife.ui.Foodvisor.Foodvisor
+import com.example.mylife.ui.Foodvisor.FoodvisorDestination
 import com.example.mylife.ui.exercise.ActivityDestination
 import com.example.mylife.ui.exercise.ActivityScreen
 import com.example.mylife.ui.exercise.AddExerDestination
@@ -72,7 +74,8 @@ fun AppNavHost(
                 navigateToListExer = { navController.navigate(ActivityDestination.route) },
                 navigateToUser = { navController.navigate(USerDestination.route) },
                 navigateToListMeal = { navController.navigate(MealListDestination.route) },
-                navigateToFood = { navController.navigate(FoodListDestination.route) }
+                navigateToFood = { navController.navigate(FoodListDestination.route) },
+                navigateToFoodvisor = { navController.navigate(FoodvisorDestination.route) }
             )
         }//
         composable(
@@ -84,7 +87,7 @@ fun AppNavHost(
             rowItemFood(
                 navigateToEachMeal = { navController.navigate("${EachMealDestination.route}/$it") },
                 navigateToUser = { navController.navigate(USerDestination.route) },
-                navigateToMain = { navController.navigate(HomeDestination.route) }
+                navigateToMain = { navController.navigate(HomeDestination.route) },
             )
         }
         composable(route = ActivityDestination.route) {
@@ -152,18 +155,26 @@ fun AppNavHost(
                 navigateToUser = { navController.navigate(USerDestination.route) },
                 navigateToAddFood = { navController.navigate("${FoodListDestination.route}/$it") },
                 navigateToDetailFood = { navController.navigate("${DetailInforDestination.route}/$it") },
-                navigateToMain = { navController.navigate(HomeDestination.route) }
+                navigateToMain = { navController.navigate(HomeDestination.route) },
             )
         }//
         composable(
             route = AddMealDestination.route,
         ) {
-            AddMealScreen(navigateToHome = { navController.navigate(MealListDestination.route) },
+            AddMealScreen(
+                navigateToHome = { navController.navigate(MealListDestination.route) },
                 navigateToUser = { navController.navigate(USerDestination.route) },
                 navigateToListMeal = { navController.navigate(MealListDestination.route) },
-                navigateToEachMeal = {navController.navigate("${EachMealDestination.route}/$it")},
+                navigateToEachMeal = { navController.navigate("${EachMealDestination.route}/$it") },
             )
         }//
+        composable(
+            route = FoodvisorDestination.route,
+        ) {
+            Foodvisor(
+                navigateToHome = { navController.navigate(HomeDestination.route) },
+            )
+        }
     }
 }
 
@@ -177,6 +188,7 @@ enum class AppScreen(@StringRes val title: Int) {
     AddExer(title = R.string.ADDEXER),
     Detail(title = R.string.DETAILINFOR),
     User(title = R.string.USERINFOR),
+    Foodvisor(title = R.string.Foodvisor)
 }
 
 

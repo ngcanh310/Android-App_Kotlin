@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "food")
 data class Food(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var food_id: Int,
     var food_name: String,
     var food_calories: Double,

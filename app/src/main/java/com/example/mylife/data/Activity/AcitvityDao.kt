@@ -1,7 +1,9 @@
 package com.example.mylife.data.Activity
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,5 +15,11 @@ interface ActivityDao {
     fun searchForActivity(search: String): Flow<List<Activity>>
 
     @Query("SELECT * FROM activity")
-    fun getAllActivity(): List<Activity>
+    fun getAllActivity(): Flow<List<Activity>>
+
+    @Insert
+    suspend fun insertActivity(activity: Activity)
+
+    @Update
+    suspend fun updateActivity(activity: Activity)
 }

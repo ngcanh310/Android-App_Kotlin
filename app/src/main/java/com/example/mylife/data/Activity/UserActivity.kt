@@ -8,7 +8,7 @@ import com.example.mylife.data.Meal.Converters
 @Entity(tableName = "user_activity")
 data class UserActivity (
     @PrimaryKey(autoGenerate = true)
-    var user_activity_id: Int,
+    var user_activity_id: Int = 0,
     var activity: String,
     var time: Int,
     var calories_consume: Double,

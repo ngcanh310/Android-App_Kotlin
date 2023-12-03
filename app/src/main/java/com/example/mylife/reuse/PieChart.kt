@@ -4,30 +4,36 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.mylife.R
 import com.example.mylife.ui.information.formatDouble
 
 @Composable
 fun PieChart(
     consumed: Double,
     target: Double,
-    radiusOuter: Dp = 90.dp,
-    chartBarWidth: Dp = 10.dp,
+    radiusOuter: Dp = dimensionResource(id = R.dimen.radius_outer),
+    chartBarWidth: Dp = dimensionResource(id = R.dimen.padding_small),
     animDuration: Int = 1000,
 ) {
     val totalSum = target
@@ -59,60 +65,65 @@ fun PieChart(
     LaunchedEffect(key1 = true) {
         animationPlayed = true
     }
-
-    Canvas(
+    Box(
         modifier = Modifier
             .size(radiusOuter * 2f)
-            .rotate(animateRotation)
     ) {
-        val consumedColor = Color(19, 6, 143)
-        val remainColor = Color(214, 209, 230)
+        val consumedColor = colorResource(id = R.color.piechart_consumed)
+        val remainColor = colorResource(id = R.color.piechart_remain)
 
-        drawArc(
-            color = consumedColor,
-            startAngle = -90f,
-            sweepAngle = consumedRadius.toFloat(),
-            useCenter = false,
-            style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
-        )
+        Canvas(
+            modifier = Modifier.matchParentSize()
+        ) {
+            drawArc(
+                color = consumedColor,
+                startAngle = -90f,
+                sweepAngle = consumedRadius.toFloat(),
+                useCenter = false,
+                style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
+            )
+        }
 
-        lastValue += consumedRadius.toFloat()
+        // Draw remaining arc
+        Canvas(
+            modifier = Modifier.matchParentSize()
+        ) {
+            drawArc(
+                color = remainColor,
+                startAngle = (consumedRadius - 90).toFloat(),
+                sweepAngle = remainRadius.toFloat(),
+                useCenter = false,
+                style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
+            )
+        }
 
-        drawArc(
-            color = remainColor,
-            startAngle = lastValue - 90f,
-            sweepAngle = remainRadius.toFloat(),
-            useCenter = false,
-            style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
-        )
+        // Centered Text
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            val text2 = "${formatDouble(consumed)}/${formatDouble(target)}"
+            val text1 = "Kcal"
 
-        drawIntoCanvas { canvas ->
-            val text1 = "${formatDouble(consumed)}/${formatDouble(target)}"
-            val text2 = "Kcal"
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = text1,
+                    fontSize = dimensionResource(id = R.dimen.font_small).value.sp,
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.black)
+                )
 
-            val textPaint = android.graphics.Paint().apply {
-                color = android.graphics.Color.BLACK
-                textSize = 60f
-                textAlign = android.graphics.Paint.Align.CENTER
+                Text(
+                    text = text2,
+                    fontSize = dimensionResource(id = R.dimen.font_small).value.sp,
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.black)
+                )
             }
-
-            canvas.nativeCanvas.rotate(-animateRotation, size.width / 2f, size.height / 2f)
-
-            val text1Height = textPaint.descent() + textPaint.ascent()
-
-            canvas.nativeCanvas.drawText(
-                text1,
-                size.width / 2f,
-                size.height / 2f - text1Height / 2,
-                textPaint
-            )
-
-            canvas.nativeCanvas.drawText(
-                text2,
-                size.width / 2f,
-                size.height / 2f + text1Height,
-                textPaint
-            )
         }
     }
 }
@@ -122,8 +133,8 @@ fun SecondarypieChart(
     consumed: Double,
     target: Double,
     nutrition: String,
-    radiusOuter: Dp = 90.dp,
-    chartBarWidth: Dp = 10.dp,
+    radiusOuter: Dp = dimensionResource(id = R.dimen.radius_outer_secondary),
+    chartBarWidth: Dp = dimensionResource(id = R.dimen.padding_small),
     animDuration: Int = 1000,
 ) {
 
@@ -157,59 +168,63 @@ fun SecondarypieChart(
         animationPlayed = true
     }
 
-    Canvas(
+    Box(
         modifier = Modifier
-            .size(radiusOuter * 1.3f)
-            .rotate(animateRotation)
+            .size(radiusOuter * 1.5f)
     ) {
-        val consumedColor = Color(0xFF800080)
-        val remainColor = Color(214, 209, 230)
+        val consumedColor = colorResource(id = R.color.teal_700)
+        val remainColor = colorResource(id = R.color.piechart_remain)
 
-        drawArc(
-            color = consumedColor,
-            startAngle = -90f,
-            sweepAngle = consumedRadius.toFloat(),
-            useCenter = false,
-            style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
-        )
+        Canvas(
+            modifier = Modifier.matchParentSize()
+        ) {
+            drawArc(
+                color = consumedColor,
+                startAngle = -90f,
+                sweepAngle = consumedRadius.toFloat(),
+                useCenter = false,
+                style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
+            )
+        }
 
-        lastValue += consumedRadius.toFloat()
+        Canvas(
+            modifier = Modifier.matchParentSize()
+        ) {
+            drawArc(
+                color = remainColor,
+                startAngle = (consumedRadius - 90).toFloat(),
+                sweepAngle = remainRadius.toFloat(),
+                useCenter = false,
+                style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
+            )
+        }
 
-        drawArc(
-            color = remainColor,
-            startAngle = lastValue - 90f,
-            sweepAngle = remainRadius.toFloat(),
-            useCenter = false,
-            style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            val text2 = "${formatDouble(consumed)}/${formatDouble(target)}"
+            val text1 = "$nutrition"
 
-        drawIntoCanvas { canvas ->
-            val text1 = "${formatDouble(consumed)}/${formatDouble(target)}"
-            val text2 = "$nutrition"
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = text1,
+                    fontSize = dimensionResource(id = R.dimen.font_tiny).value.sp,
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.black)
+                )
 
-            val textPaint = android.graphics.Paint().apply {
-                color = android.graphics.Color.BLACK
-                textSize = 60f
-                textAlign = android.graphics.Paint.Align.CENTER
+                Text(
+                    text = text2,
+                    fontSize = dimensionResource(id = R.dimen.font_tiny).value.sp,
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.black)
+                )
             }
-
-            canvas.nativeCanvas.rotate(-animateRotation, size.width / 2f, size.height / 2f)
-
-            val text1Height = textPaint.descent() + textPaint.ascent()
-
-            canvas.nativeCanvas.drawText(
-                text1,
-                size.width / 2f,
-                size.height / 2f - text1Height / 2,
-                textPaint
-            )
-
-            canvas.nativeCanvas.drawText(
-                text2,
-                size.width / 2f,
-                size.height / 2f + text1Height,
-                textPaint
-            )
         }
     }
 }

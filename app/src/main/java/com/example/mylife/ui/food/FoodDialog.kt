@@ -1,6 +1,8 @@
 package com.example.mylife.ui.food
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,16 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import com.example.mylife.R
 import com.example.mylife.reuse.EditNumberField
+import com.example.mylife.ui.Foodvisor.FoodAnalyze
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -43,15 +46,15 @@ fun CustomDialog(
         )
     ) {
         Card(
-            shape = RoundedCornerShape(15.dp),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_15)),
             modifier = Modifier
                 .fillMaxWidth(0.95f)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
-                verticalArrangement = Arrangement.spacedBy(25.dp)
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_24))
             ) {
                 Text(
                     text = "${uiState.food.food_name}",
@@ -63,7 +66,7 @@ fun CustomDialog(
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_15))
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -78,7 +81,7 @@ fun CustomDialog(
                             value = uiState.quantity,
                             onValueChange = { onValueChange(uiState.copy(quantity = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -87,13 +90,15 @@ fun CustomDialog(
                     Divider()
 
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text("Kcal: ${uiState.nutrition.calories}", fontWeight = FontWeight.Bold)
-                        Text("Protein: ${uiState.nutrition.protein}", fontWeight = FontWeight.Bold)
-                        Text("Carb: ${uiState.nutrition.carb}", fontWeight = FontWeight.Bold)
-                        Text("Fat: ${uiState.nutrition.fat}", fontWeight = FontWeight.Bold)
+                        Text("P: ${uiState.nutrition.protein}", fontWeight = FontWeight.Bold)
+                        Text("C: ${uiState.nutrition.carb}", fontWeight = FontWeight.Bold)
+                        Text("F: ${uiState.nutrition.fat}", fontWeight = FontWeight.Bold)
 
                     }
                     if (showError) {
@@ -107,7 +112,7 @@ fun CustomDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_30)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
@@ -175,15 +180,15 @@ fun CustomFoodDialog(
         )
     ) {
         Card(
-            shape = RoundedCornerShape(15.dp),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_15)),
             modifier = Modifier
                 .fillMaxWidth(0.95f)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
-                verticalArrangement = Arrangement.spacedBy(25.dp)
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_24))
             ) {
                 Text(
                     text = "Add your own food",
@@ -191,7 +196,7 @@ fun CustomFoodDialog(
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_15))
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -200,31 +205,13 @@ fun CustomFoodDialog(
                         EditNumberField(
                             label = R.string.food,
                             keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Number,
+                                keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Done
                             ),
                             value = uiState.foodName,
                             onValueChange = { onValueChange(uiState.copy(foodName = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
-                                .fillMaxWidth()
-                                .zIndex(1f)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        EditNumberField(
-                            label = R.string.quantity,
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Done
-                            ),
-                            value = uiState.quantity,
-                            onValueChange = { onValueChange(uiState.copy(quantity = it)) },
-                            modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -242,7 +229,7 @@ fun CustomFoodDialog(
                             value = uiState.calories,
                             onValueChange = { onValueChange(uiState.copy(calories = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -260,7 +247,7 @@ fun CustomFoodDialog(
                             value = uiState.protein,
                             onValueChange = { onValueChange(uiState.copy(protein = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -278,13 +265,15 @@ fun CustomFoodDialog(
                             value = uiState.carb,
                             onValueChange = { onValueChange(uiState.copy(carb = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
                     }
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         EditNumberField(
@@ -296,7 +285,7 @@ fun CustomFoodDialog(
                             value = uiState.fat,
                             onValueChange = { onValueChange(uiState.copy(fat = it)) },
                             modifier = Modifier
-                                .padding(bottom = 32.dp)
+                                .padding(bottom = dimensionResource(id = R.dimen.dp_30))
                                 .fillMaxWidth()
                                 .zIndex(1f)
                         )
@@ -314,7 +303,7 @@ fun CustomFoodDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(30.dp),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_30)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
@@ -338,8 +327,7 @@ fun CustomFoodDialog(
                     Button(
                         onClick = {
                             if (
-                                uiState.quantity.isEmpty() || uiState.quantity.toDoubleOrNull() == null
-                                || uiState.protein.isEmpty() || uiState.quantity.toDoubleOrNull() == null
+                                uiState.protein.isEmpty() || uiState.protein.toDoubleOrNull() == null
                                 || uiState.carb.isEmpty() || uiState.carb.toDoubleOrNull() == null
                                 || uiState.fat.isEmpty() || uiState.fat.toDoubleOrNull() == null
                                 || uiState.fat.isEmpty() || uiState.fat.toDoubleOrNull() == null
@@ -361,6 +349,188 @@ fun CustomFoodDialog(
                     ) {
                         Text(
                             text = "Confirm",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun FoodDetectDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    uiState: FoodAnalyze,
+) {
+    var showError by remember { mutableStateOf(false) }
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Card(
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_15)),
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_24))
+            ) {
+                Text(
+                    text = "${uiState.foodName}",
+                    textAlign = TextAlign.Center
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_15))
+                ) {
+                    Divider()
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Kcal: ${uiState.calories}", fontWeight = FontWeight.Bold)
+                        Text("P: ${uiState.protein}", fontWeight = FontWeight.Bold)
+                        Text("C: ${uiState.carb}", fontWeight = FontWeight.Bold)
+                        Text("F: ${uiState.fat}", fontWeight = FontWeight.Bold)
+
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_30)),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            onConfirm()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Retry",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun NoFoodDetectDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    var showError by remember { mutableStateOf(false) }
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Card(
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_15)),
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_24))
+            ) {
+                Text(
+                    text = "Please try again",
+                    textAlign = TextAlign.Center
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_15))
+                ) {
+                    Divider()
+
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_30)),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            onConfirm()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Retry",
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                         )

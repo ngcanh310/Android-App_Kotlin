@@ -1,6 +1,7 @@
 package com.example.mylife.ui.exercise
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -66,32 +69,51 @@ object ActivityDestination : navigationDestination {
 @Composable
 fun ActivityItem(
     activity: UserActivity,
-    onDeleteActivity: (UserActivity) -> Unit
+    onDeleteActivity: (UserActivity) -> Unit,
+    onUpdateActivity: (UserActivity) -> Unit
 ) {
     Box(
         modifier = Modifier
-            .border(color = Color(0xFF473C8B), width = 2.dp, shape = RoundedCornerShape(10.dp))
+            .border(
+                color = Color(0xFF473C8B), width = 2.dp, shape = RoundedCornerShape(
+                    dimensionResource(id = R.dimen.padding_small)
+                )
+            )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(dimensionResource(id = R.dimen.padding_small)),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(R.drawable.exercise),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
+            Image(
+                painter = painterResource(R.drawable.exercise),
+                contentDescription = null,
+                modifier = Modifier.size(dimensionResource(id = R.dimen.dp_40))
+            )
+            Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_10)))
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_10))
+            ) {
                 Text(
                     text = activity.activity,
                 )
-                Spacer(modifier = Modifier.width(3.dp))
+                Text(text = "${activity.calories_consume} Kcal/${activity.time}minutes")
+                Text(text = "Added at ${activity.creationDate?.substring(11, 15)}")
+
             }
-            Text(text = "${activity.calories_consume} Kcal/${activity.time}minutes")
+            Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_3)))
+            IconButton(onClick = {
+                onUpdateActivity(activity)
+                Log.d("updateClick", "ok")
+            }) {
+                Icon(
+                    imageVector = Icons.Outlined.Create,
+                    contentDescription = null
+                )
+            }
             IconButton(onClick = { onDeleteActivity(activity) }) {
                 Icon(
                     imageVector = Icons.Outlined.Delete,
@@ -105,14 +127,14 @@ fun ActivityItem(
 @Composable
 fun MyLazyColumActivity(
     activityList: List<UserActivity>,
-    onDeleteActivity: (UserActivity) -> Unit
-
+    onDeleteActivity: (UserActivity) -> Unit,
+    onUpdateActivity: (UserActivity) -> Unit
 ) {
     LazyColumn {
         items(items = activityList, key = { it.user_activity_id }) { activity ->
 
-            ActivityItem(activity, onDeleteActivity)
-            Spacer(modifier = Modifier.height(15.dp))
+            ActivityItem(activity, onDeleteActivity, onUpdateActivity)
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_10)))
         }
     }
 }
@@ -133,10 +155,10 @@ fun ActivityScreen(navigateToAddExer: () -> Unit,
     CalendarDialog(
         state = calendarState,
         config = CalendarConfig(
-            style = CalendarStyle.WEEK,
+            style = CalendarStyle.MONTH,
         ),
         selection = CalendarSelection.Date {
-            val formattedDate = it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            val formattedDate = it.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
             viewModel.onSelectedDateChange(formattedDate)
         }
     )
@@ -171,7 +193,28 @@ fun ActivityScreen(navigateToAddExer: () -> Unit,
                 }
             },
             calendarState,
-            selectedDate
+            selectedDate,
+            {
+                viewModel.onAddActivityClick()
+                coroutineScope.launch {
+                    viewModel.getActivity(it)
+                }
+            }
+        )
+    }
+    if (viewModel.isDialogShown) {
+        EditCustomDialog(
+            onDismiss = {
+                viewModel.onDismissDialog()
+            },
+            onConfirm = {
+                viewModel.onDismissDialog()
+                coroutineScope.launch {
+                    viewModel.updateActivity()
+                }
+            },
+            uiState = viewModel.editActivity,
+            onValueChange = viewModel::updateEditActivity
         )
     }
 }
@@ -181,46 +224,47 @@ fun ActivityScreenBody(
     onDeleteActivity: (UserActivity) -> Unit,
     calendarState: SheetState,
     selectedDate: String,
+    onUpdateActivity: (UserActivity) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp),
+            .padding(dimensionResource(id = R.dimen.dp_20)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_40)))
         Card(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(dimensionResource(id = R.dimen.dp_20))
                 .fillMaxWidth()
                 .clickable(onClick = { calendarState.show() })
                 .shadow(
-                    elevation = 25.dp,
+                    elevation = dimensionResource(id = R.dimen.dp_24),
                     ambientColor = Color.Gray,
                     spotColor = Color.Black,
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp_10))
                 ),
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+            elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.dp_10))
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(dimensionResource(id = R.dimen.dp_15)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Today, $selectedDate",
+                    text = "$selectedDate",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp
+                    fontSize = dimensionResource(id = R.dimen.font_large).value.sp
                 )
             }
         }
-        Spacer(modifier = Modifier.height(20.dp))
-        MyLazyColumActivity(activityList, onDeleteActivity)
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_20)))
+        MyLazyColumActivity(activityList, onDeleteActivity, onUpdateActivity)
     }
 }
 

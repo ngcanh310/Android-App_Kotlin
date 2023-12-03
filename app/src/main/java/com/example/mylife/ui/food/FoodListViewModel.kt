@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class FoodListViewModel(
     private val foodRepository: FoodRepository,
@@ -25,7 +27,7 @@ class FoodListViewModel(
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     val mealId: Int = checkNotNull(savedStateHandle[FoodListDestination.mealIdArg])
-    private var _searchText = MutableStateFlow(" ")
+    private var _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
     private var _isSearching = MutableStateFlow(false)
@@ -35,8 +37,18 @@ class FoodListViewModel(
 
     var foodListUiState by mutableStateOf(FoodListUiState(mealId = mealId))
 
-    var customFood by mutableStateOf(CustomFood(mealId = mealId))
-    private var _foods = MutableStateFlow(foodRepository.getAllFoodStream())
+    var customFood by mutableStateOf(CustomFood())
+    private var _foods = MutableStateFlow<List<Food>>(emptyList())
+
+    init {
+        viewModelScope.launch {
+            foodRepository.getAllFoodStream()
+                .collect { foods ->
+                    _foods.value = foods
+                }
+        }
+    }
+
     val foods = searchText
         .debounce(500L)
         .combine(_foods) { text, foods ->
@@ -68,7 +80,6 @@ class FoodListViewModel(
     fun onUpdateCustomFood(uiState: CustomFood) {
         customFood = customFood.copy(
             foodName = uiState.foodName,
-            quantity = uiState.quantity,
             calories = uiState.calories,
             carb = uiState.carb,
             fat = uiState.fat,
@@ -76,8 +87,12 @@ class FoodListViewModel(
         )
     }
 
+    suspend fun updateFoods() {
+        _foods.value = foodRepository.getAllFoodStream().first()
+    }
+
     suspend fun addCustomFood() {
-        servingRepository.insertServing(customFood.toFood())
+        foodRepository.addFood(customFood.toFood())
     }
 
     private fun filterFoods(foods: List<Food>, filter: FilterType): List<Food> {
@@ -91,7 +106,6 @@ class FoodListViewModel(
 
     suspend fun setFavorite(food: Food) {
         foodRepository.updateFood(food.copy(is_favorite = !food.is_favorite))
-        _foods.value = foodRepository.getAllFoodStream()
     }
 
     var isDialogShown by mutableStateOf(false)
@@ -184,8 +198,6 @@ fun FoodListUiState.toServing(): Serving = Serving(
 
 data class CustomFood(
     var foodName: String = "",
-    var mealId: Int = 0,
-    var quantity: String = "",
     var calories: String = "",
     var protein: String = "",
     var carb: String = "",
@@ -193,13 +205,12 @@ data class CustomFood(
 
 )
 
-fun CustomFood.toFood(): Serving = Serving(
-    serving_id = 0,
-    meal_id = mealId,
+fun CustomFood.toFood(): Food = Food(
+    food_id = 0,
     food_name = foodName,
-    quantity = quantity.toDouble(),
-    serving_calories = calories.toDouble(),
-    serving_protein = protein.toDouble(),
-    serving_carb = carb.toDouble(),
-    serving_fat = fat.toDouble(),
+    food_calories = calories.toDouble(),
+    food_protein = protein.toDouble(),
+    food_carb = carb.toDouble(),
+    food_fat = fat.toDouble(),
+    is_favorite = false
 )

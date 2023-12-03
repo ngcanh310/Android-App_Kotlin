@@ -5,19 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.mylife.data.Food.Food
 import com.example.mylife.data.Food.FoodRepository
 import com.example.mylife.data.Serving.Serving
 import com.example.mylife.data.Serving.ServingRepository
 import com.example.mylife.ui.home.Nutrition
-import com.example.mylife.ui.information.formatDouble
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.stateIn
 
 class AddFoodViewModel(
     savedStateHandle: SavedStateHandle,
@@ -32,7 +26,7 @@ class AddFoodViewModel(
     var addFoodUiState by mutableStateOf(AddFoodUiState(mealId = mealId))
 
     private var _foods = MutableStateFlow(foodRepository.getAllFoodStream())
-    val foods = searchText
+    /*val foods = searchText
         .debounce(1000L)
         .combine(_foods) {
             text, foods ->
@@ -91,7 +85,7 @@ class AddFoodViewModel(
         return with(uiState) {
             quantity.isNotBlank() && food.food_id != 0
         }
-    }
+    }*/
 }
 
 

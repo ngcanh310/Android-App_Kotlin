@@ -9,13 +9,16 @@ import com.example.mylife.data.Activity.Activity
 import com.example.mylife.data.Activity.ActivityRepository
 import com.example.mylife.data.Activity.UserActivity
 import com.example.mylife.data.Activity.UserActivityRepository
+import com.example.mylife.ui.information.formatDouble
 import com.example.mylife.ui.meal.getCurrentDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class AddExerciseViewModel(
     private val userActivityRepository: UserActivityRepository,
@@ -29,7 +32,16 @@ class AddExerciseViewModel(
 
     var addExerciseUiState by mutableStateOf(AddExerciseUiState())
     var customActivity by mutableStateOf(CustomActivity())
-    private var _activity = MutableStateFlow(activityRepository.getAllActivity())
+    private var _activity = MutableStateFlow<List<Activity>>(emptyList())
+
+    init {
+        viewModelScope.launch {
+            activityRepository.getAllActivity().collect {
+                _activity.value = it
+            }
+        }
+    }
+
     val activity = searchText
         .debounce(500L)
         .combine(_activity) { text, activity ->
@@ -65,17 +77,20 @@ class AddExerciseViewModel(
         )
         if (uiState.time != "" && uiState.time.toDoubleOrNull() != null) {
             addExerciseUiState = addExerciseUiState.copy(
-                calories = (uiState.time.toInt() * uiState.activity.calories_consume) / 30
+                calories = formatDouble((uiState.time.toInt() * uiState.activity.calories_consume) / 30)
             )
         }
     }
 
     fun updateCustomActivity(uiState: CustomActivity) {
         customActivity = customActivity.copy(
-            time = uiState.time,
             activity = uiState.activity,
             calories = uiState.calories
         )
+    }
+
+    suspend fun setFavorite(activity: Activity) {
+        activityRepository.updateActivity(activity.copy(is_favorite = !activity.is_favorite))
     }
 
     suspend fun addExercise() {
@@ -83,7 +98,11 @@ class AddExerciseViewModel(
     }
 
     suspend fun addCustomActivity() {
-        userActivityRepository.addActivity(customActivity.toUserActivity())
+        activityRepository.insertActivity(customActivity.toUserActivity())
+    }
+
+    suspend fun updateActivities() {
+        _activity.value = activityRepository.getAllActivity().first()
     }
 
     var isDialogShown by mutableStateOf(false)
@@ -125,17 +144,14 @@ fun AddExerciseUiState.toUserActivity(): UserActivity = UserActivity(
 )
 
 data class CustomActivity(
-    var userActivityId: Int = 0,
     var activity: String = "",
-    var time: String = "",
     var calories: String = "",
 )
 
-fun CustomActivity.toUserActivity(): UserActivity = UserActivity(
-    user_activity_id = userActivityId,
-    activity = activity,
-    time = time.toInt(),
+fun CustomActivity.toUserActivity(): Activity = Activity(
+    activity_id = 0,
+    activity_name = activity,
     calories_consume = calories.toDouble(),
-    creationDate = getCurrentDate()
+    is_favorite = false
 )
 

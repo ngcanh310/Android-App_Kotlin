@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -79,15 +80,15 @@ fun UpProfileBody(
     Column(modifier = Modifier
         .fillMaxWidth()
         .verticalScroll(rememberScrollState())) {
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_big)))
         Column {
-            Spacer(modifier = Modifier.height(35.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_big)))
             Text(
                 text = "Please enter your information",
-                fontSize = 25.sp,
+                fontSize = dimensionResource(id = R.dimen.font_large).value.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             EditNumberField(
                 label = R.string.name,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -97,14 +98,17 @@ fun UpProfileBody(
                 value = viewModel.entryInfoUiState.userInfo.userName,
                 onValueChange = {
                     viewModel.updateUiState(viewModel.entryInfoUiState.userInfo.copy(userName = it))
-                                },
+                },
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
+                    .padding(dimensionResource(id = R.dimen.padding_large))
                     .fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(15.dp))
-            GenderRateRadioGroupExample(onValueChange = viewModel::updateUiState, userInfo = viewModel.entryInfoUiState.userInfo)
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_15)))
+            GenderRateRadioGroupExample(
+                onValueChange = viewModel::updateUiState,
+                userInfo = viewModel.entryInfoUiState.userInfo
+            )
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_15)))
             EditNumberField(
                 label = R.string.age,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -114,12 +118,12 @@ fun UpProfileBody(
                 value = viewModel.entryInfoUiState.userInfo.userAge,
                 onValueChange = {
                     viewModel.updateUiState(viewModel.entryInfoUiState.userInfo.copy(userAge = it))
-                                },
+                },
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
+                    .padding(dimensionResource(id = R.dimen.padding_large))
                     .fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             EditNumberField(
                 label = R.string.height,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -131,10 +135,10 @@ fun UpProfileBody(
                     viewModel.updateUiState(viewModel.entryInfoUiState.userInfo.copy(userHeight = it))
                 },
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = dimensionResource(id = R.dimen.padding_large))
                     .fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             EditNumberField(
                 label = R.string.weight,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -146,10 +150,10 @@ fun UpProfileBody(
                     viewModel.updateUiState(viewModel.entryInfoUiState.userInfo.copy(userWeight = it))
                 },
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = dimensionResource(id = R.dimen.padding_large))
                     .fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_small)))
             GoalRadioGroupExample(
                 onValueChange = viewModel::updateUiState,
                 userInfo = viewModel.entryInfoUiState.userInfo
@@ -158,7 +162,7 @@ fun UpProfileBody(
                 onValueChange = viewModel::updateUiState,
                 userInfo = viewModel.entryInfoUiState.userInfo
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_medium)))
             if (errorText) {
                 Text("Please enter validate input", fontWeight = FontWeight.Bold, color = Color.Red)
             }
@@ -180,7 +184,12 @@ fun UpProfileBody(
                             }
                         }
                     },
-                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 20.dp)
+                    modifier = Modifier.padding(
+                        0.dp,
+                        0.dp,
+                        0.dp,
+                        dimensionResource(id = R.dimen.padding_medium)
+                    )
                 ) {
                     Text(text = "Update now")
                 }
@@ -218,7 +227,7 @@ fun RadioOption(
             selected = optionValue == selectedOption,
             onClick = { onOptionSelected(optionValue) }
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.space_tiny)))
         Text(text = text)
     }
 }
@@ -231,10 +240,17 @@ fun GoalRadioGroupExample(
     var selectedOption by remember { mutableStateOf(0) }
 
     Column {
-        Text(text = "Your Goal: ",
+        Text(
+            text = "Your Goal: ",
             fontSize = 21.sp,
-            modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp))
-        Spacer(modifier = Modifier.height(5.dp))
+            modifier = Modifier.padding(
+                dimensionResource(id = R.dimen.padding_15),
+                0.dp,
+                dimensionResource(id = R.dimen.padding_15),
+                0.dp
+            )
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.space_tiny)))
         RadioOption("Keep weight", 1, selectedOption) {
             selectedOption = it
             onValueChange(userInfo.copy(userAim = selectedOption.toString()))
@@ -257,10 +273,17 @@ fun ActivityRateRadioGroupExample(
     var selectedOption by remember { mutableStateOf(0) }
 
     Column {
-        Text(text = "Your Activity Rate: ",
-            fontSize = 21.sp,
-            modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp))
-        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = "Your Activity Rate: ",
+            fontSize = dimensionResource(id = R.dimen.font_medium).value.sp,
+            modifier = Modifier.padding(
+                dimensionResource(id = R.dimen.padding_15),
+                0.dp,
+                dimensionResource(id = R.dimen.padding_15),
+                0.dp
+            )
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_5)))
         RadioOption("Lightly Active", 1, selectedOption) {
             selectedOption = it
             onValueChange(userInfo.copy(userActivityRate = selectedOption.toString()))
@@ -284,10 +307,17 @@ fun GenderRateRadioGroupExample(
     var selectedOption by remember { mutableStateOf(0) }
 
     Column {
-        Text(text = "Gender: ",
-            fontSize = 21.sp,
-            modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp))
-        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = "Gender: ",
+            fontSize = dimensionResource(id = R.dimen.font_medium).value.sp,
+            modifier = Modifier.padding(
+                dimensionResource(id = R.dimen.padding_15),
+                0.dp,
+                dimensionResource(id = R.dimen.padding_15),
+                0.dp
+            )
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_5)))
         Row {
             RadioOption("Male", 1, selectedOption) {
                 selectedOption = it
